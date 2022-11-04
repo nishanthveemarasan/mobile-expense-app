@@ -16,8 +16,15 @@ const ExpenseCategory = ({ category, cIndex, action }) => {
         itemId: itemIndex,
       })
     );
-    const page =
-      action == "save" ? "AddExpenseItemScreen" : "UpdateExpenseItemScreen";
+    //recurring
+    let page = "UpdateExpenseItemScreen";
+    if (action == "save") {
+      page = "AddExpenseItemScreen";
+    } else if (action == "recurring") {
+      page = "AddRecurringPaymentScreen";
+    }
+    // const page =
+    //   action == "save" ? "AddExpenseItemScreen" : "UpdateExpenseItemScreen";
     navigation.navigate(page);
   };
   const onOpenCategoryHander = () => {

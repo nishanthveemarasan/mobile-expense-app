@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { FlatList, StyleSheet, View } from "react-native";
 import ExpenseCategory from "../../../components/ExpenseManagerScreen/ExpenseCategory/ExpenseCategory";
 const ShowExpenseCategoryScreen = ({ navigation, route }) => {
-  const action = route.params.action;
+  const action = route.params?.action;
   const mapStateToProps = (state) => {
     return {
       data: state.expenseStore.payment.data.category,

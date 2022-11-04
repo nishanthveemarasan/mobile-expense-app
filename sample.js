@@ -25,11 +25,9 @@ import UpdateExpenseItemScreen from "./screens/ExpenseManagerScreen/SummaryCateg
 import SavingManagerScreen from "./screens/SavingManagerScreen";
 import AddSavingScreen from "./screens/savingsMangerScreen/AddSavingScreen";
 import store from "./store/store";
-import ShowIncomeExpenseMonthlyGraphScreen from "./screens/ExpenseManagerScreen/Summary/ShowIncomeExpenseMonthlyGraphScreen";
-import ShowIncomeExpenseWeeklyGraphScreen from "./screens/ExpenseManagerScreen/Summary/ShowIncomeExpenseWeeklyGraphScreen";
 
 const Stack = createNativeStackNavigator();
-export default function App() {
+export default function Sample() {
   const [fontsLoaded] = useFonts(FONTS);
   if (!fontsLoaded) {
     return null;
@@ -111,12 +109,8 @@ export default function App() {
               component={ShowOnlyExpenseSummaryScreen}
             />
             <Stack.Screen
-              name="ShowIncomeExpenseMonthlyGraphScreen"
-              component={ShowIncomeExpenseMonthlyGraphScreen}
-            />
-            <Stack.Screen
-              name="ShowIncomeExpenseWeeklyGraphScreen"
-              component={ShowIncomeExpenseWeeklyGraphScreen}
+              name="ShowOnlyIncomeSummaryScreen"
+              component={ShowOnlyIncomeSummaryScreen}
             />
             <Stack.Screen
               name="ShowRecurringPaymentItemScreen"

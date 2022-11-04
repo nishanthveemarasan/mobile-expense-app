@@ -3,15 +3,19 @@ import LinearGredientWrapper from "../../wrapper/LinearGredientWrapper";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../../constants/colors";
 import { CUR } from "../../../constants/months";
+import { restrictDecimalPlace } from "../../../helper/helper";
 const Transactions = ({ data, onDeletePressed }) => {
   const onDeleteItemHander = (uuid) => {
     onDeletePressed(uuid);
   };
   const onDisplayExpenseItem = ({ item }) => {
-    console.log(item.amount);
     let color = {
       color: item.type == "income" ? Colors.success500 : Colors.danger400,
     };
+    const amount =
+      item.type == "income"
+        ? `${CUR}${restrictDecimalPlace(item.amount)}`
+        : `-${CUR}${restrictDecimalPlace(item.amount)}`;
     return (
       <View style={styles.itemContainer}>
         <View style={styles.leftContainer}>
@@ -24,10 +28,7 @@ const Transactions = ({ data, onDeletePressed }) => {
         </View>
         <View style={styles.rightContainer}>
           <View style={styles.amountContainer}>
-            <Text style={[styles.amount, color]}>
-              {CUR}
-              {item.amount}
-            </Text>
+            <Text style={[styles.amount, color]}>{amount}</Text>
           </View>
           <Pressable
             android_ripple={{ color: "green" }}

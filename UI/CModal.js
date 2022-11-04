@@ -2,7 +2,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/colors";
 
 const CModal = ({ visible, data, onClose }) => {
-  console.log(data, visible);
+  // console.log(data, visible);
   return (
     <View style={styles.centeredView}>
       <Modal

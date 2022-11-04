@@ -14,7 +14,9 @@ const SummaryDateWiseScreen = ({ data }) => {
           <Text style={styles.text}>No Data to show</Text>
         </View>
       ) : (
-        <SpendItems data={data} showCategory={true} />
+        <View style={styles.itemContainer}>
+          <SpendItems data={data} showCategory={true} />
+        </View>
       )}
     </LinearGredientWrapper>
   );
@@ -32,5 +34,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "ubuntu-bold",
+  },
+  itemContainer: {
+    marginTop: "5%",
   },
 });

@@ -1,3 +1,4 @@
+import { monthsName } from "../constants/months";
 import { restrictDecimalPlace, toLower } from "./helper";
 
 export const getCategoryNameArray = (array) => {
@@ -123,7 +124,7 @@ export const filterDataByType = (dataArray, type) => {
     }
   });
 
-  return { data, total: total.toFixed(2), category };
+  return { data, total: total, category };
 };
 export const getWeekDetails = (firstDayOfWeek, lastDayOfWeek) => {
   const dayWeek = firstDayOfWeek.getDay() == 0 ? 7 : firstDayOfWeek.getDay();
@@ -165,10 +166,10 @@ export const getWeekDetails = (firstDayOfWeek, lastDayOfWeek) => {
     dayEndMonth: lastDayOfWeek.getMonth() + 1,
   };
 };
-export const getWeeklyArrayDetails = (firstpayDate) => {
+export const getWeeklyArrayDetails = (firstpayDate, lastPayDate) => {
   const firstDate = new Date(firstpayDate);
-  let firstDayOfWeek = new Date();
-  let lastDayOfWeek = new Date();
+  let firstDayOfWeek = new Date(lastPayDate);
+  let lastDayOfWeek = new Date(lastPayDate);
   let details;
   let week = [];
 
@@ -246,9 +247,9 @@ export const getMonthDetails = (currentMonth) => {
   };
 };
 
-export const getMonthlyArrayDetails = (firstpayDate) => {
+export const getMonthlyArrayDetails = (firstpayDate, lastPayDate) => {
   const firstDate = new Date(firstpayDate);
-  let currentMonth = new Date();
+  let currentMonth = new Date(lastPayDate);
   let month = [];
   while (currentMonth.getTime() >= firstDate.getTime()) {
     let details = getMonthDetails(currentMonth);
@@ -274,9 +275,9 @@ export const getYearDetails = (currentYear) => {
   };
 };
 
-export const getYearlyArrayDetails = (firstpayDate) => {
+export const getYearlyArrayDetails = (firstpayDate, lastPayDate) => {
   const firstDate = new Date(firstpayDate);
-  let currentYear = new Date();
+  let currentYear = new Date(lastPayDate);
   let year = [];
 
   while (currentYear.getTime() >= firstDate.getTime()) {
@@ -345,14 +346,18 @@ export const filterDataByDateGroupByType = (dataArray, dateGroup, type) => {
 
 export const addNewDataToExpenseData = (data, newData) => {
   let previousFirstPayDate = new Date(data[data.length - 1].date);
+  let previousLastPayDate = new Date(data[0].date);
   newData.forEach((item) => {
     const currentPayDate = new Date(item.date);
 
     if (previousFirstPayDate.getTime() >= currentPayDate.getTime()) {
       previousFirstPayDate = currentPayDate;
       data.push(item);
-    } else {
+    } else if (previousLastPayDate.getTime() <= currentPayDate.getTime()) {
       data.unshift(item);
+    } else {
+      let lastIndex = data.length - 1;
+      data.splice(lastIndex - 1, 0, item);
     }
   });
   return data;
@@ -365,7 +370,6 @@ export const removeItemFromExpenseArray = (expenseData, singleData) => {
 };
 
 export const updateExpenseSummaryData = (summary, dateGroup, requestData) => {
-  // console.log(requestData);
   const date = requestData.date;
   let updatedAmount = 0;
   let chartAmount = 0;
@@ -376,9 +380,8 @@ export const updateExpenseSummaryData = (summary, dateGroup, requestData) => {
   } else {
     updatedAmount = requestData.newValue - requestData.amount;
   }
-
   if (new Date(dateGroup.today.date).getTime() == new Date(date).getTime()) {
-    if (data.type == "expense") {
+    if (requestData.type == "expense") {
       summary.today.expense += updatedAmount;
       summary.today.balance += updatedAmount;
       summary.today.chart[requestData.category] += chartAmount;
@@ -429,8 +432,6 @@ export const updateExpenseSummaryData = (summary, dateGroup, requestData) => {
   }
 
   summary.balance += updatedAmount;
-  console.log("sumary");
-  console.log(summary);
   return summary;
 };
 
@@ -441,4 +442,158 @@ export const updateItemInExpenseArray = (expenseData, requestData) => {
     amount: requestData.newValue,
   };
   return expenseData;
+};
+export const getMOnthlyExpenses = (data, year) => {
+  const monthsData = [];
+  const category = [];
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
+
+    if (item.year == year) {
+      const m = Math.abs(item.month) - 1;
+      const month = monthsName[m];
+
+      if (!monthsData[month]) {
+        monthsData[month] = { expense: 0, income: 0, category: [] };
+      }
+
+      if (!monthsData[month].category[item.category]) {
+        monthsData[month].category[item.category] = 0;
+      }
+
+      if (item.type == "expense") {
+        monthsData[month].expense += Math.abs(item.amount);
+      } else {
+        monthsData[month].income += item.amount;
+      }
+      monthsData[month].category[item.category] += Math.abs(item.amount);
+
+      if (!category.includes(item.category)) {
+        category.push(item.category);
+      }
+    }
+  }
+
+  return { monthsData, category };
+};
+
+export const getMonthlySummaryChartData = (data, year) => {
+  const summaryData = [];
+  const getData = getMOnthlyExpenses(data, year);
+  const monthlyData = getData.monthsData;
+  const categories = getData.category;
+  const categoryChartData = [];
+
+  for (let i = 0; i < monthsName.length; i++) {
+    const month = monthsName[i];
+    if (monthlyData[month]) {
+      summaryData[month] = monthlyData[month];
+    } else {
+      summaryData[month] = { expense: 0, income: 0, category: [] };
+    }
+    categories.forEach((category) => {
+      if (!categoryChartData[category]) {
+        categoryChartData[category] = [];
+      }
+      if (!summaryData[month].category[category]) {
+        categoryChartData[category].push(0);
+      } else {
+        categoryChartData[category].push(
+          restrictDecimalPlace(summaryData[month].category[category])
+        );
+      }
+    });
+  }
+  return { summaryData, categoryChartData, categories };
+};
+
+const getCurrentMonthWithYear = () => {
+  const date = new Date();
+  return {
+    month: date.getMonth(),
+    year: date.getFullYear(),
+  };
+};
+
+export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
+  const currentDate = getCurrentMonthWithYear();
+
+  const expense = [];
+  const income = [];
+  let chartYIncomeAxis = [];
+  let chartYExpenseAxis = [];
+
+  let totalIncome = 0;
+  let totalExpense = 0;
+  let NoOfMonthsSpended = 0;
+
+  monthsName.forEach((month, i) => {
+    let currentMonthExpense = restrictDecimalPlace(data[month].expense);
+    let currentMonthIncome = restrictDecimalPlace(data[month].income);
+    totalIncome += currentMonthIncome;
+    totalExpense += currentMonthExpense;
+    if (i == 0) {
+      chartYIncomeAxis.push(null);
+      chartYExpenseAxis.push(null);
+    }
+    if (selectedYear == currentDate.year) {
+      if (i <= currentDate.month) {
+        chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
+        chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
+        if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
+      } else {
+        chartYIncomeAxis.push(null);
+        chartYExpenseAxis.push(null);
+      }
+    } else {
+      if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
+      chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
+      chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
+    }
+
+    expense.push(restrictDecimalPlace(data[month].expense));
+
+    income.push(restrictDecimalPlace(data[month].income));
+  });
+  const summaryChartInTotal = {
+    series: [
+      {
+        data: chartYIncomeAxis,
+        color: (opacity = 1) => `rgba(10, 94, 7, ${opacity})`,
+        strokeWidth: 2,
+      },
+      {
+        data: chartYExpenseAxis,
+        color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
+    legends: ["Income", "Expense"],
+    totalIncome: restrictDecimalPlace(totalIncome),
+    totalExpense: restrictDecimalPlace(totalExpense),
+    avgSpending: restrictDecimalPlace(totalExpense / NoOfMonthsSpended),
+    labels: monthsName,
+  };
+  return {
+    series: [
+      {
+        data: income,
+        color: (opacity = 1) => `rgba(8, 92, 8, ${opacity})`,
+        strokeWidth: 2,
+      },
+      {
+        data: expense,
+        color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
+    legends: ["Income", "Expense"],
+
+    summaryChartInTotal,
+  };
+};
+
+const getLabelsForTotal = (array) => {
+  array.unshift("");
+  return array;
 };

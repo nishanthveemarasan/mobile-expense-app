@@ -8,11 +8,14 @@ import LinearGredientWrapper from "../wrapper/LinearGredientWrapper";
 
 const DebtSummary = ({ total }) => {
   let amountColor = {
-    color: total.total > 0 ? Colors.success900 : Colors.danger400,
+    color:
+      total.total > 0 || total.total == 0
+        ? Colors.success900
+        : Colors.danger400,
   };
 
   const formattedAmount =
-    total.total > 0
+    total.total > 0 || total.total == 0
       ? `${CUR}${restrictDecimalPlace(total.total)}`
       : `-${CUR}${restrictDecimalPlace(total.total)}`;
 

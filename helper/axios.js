@@ -17,3 +17,6 @@ export const postAPI = async (url, data) => {
 export const patchAPI = async (url, data) => {
   return await API.patch(url, data);
 };
+export const deleteAPI = async (url) => {
+  return await API.delete(url);
+};

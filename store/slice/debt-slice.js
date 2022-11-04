@@ -6,75 +6,30 @@ import {
 } from "../../helper/helper";
 
 const initialState = {
-  names: [
-    { value: "Nishanth", label: "Nishanth" },
-    { value: "Veemarasan", label: "Veemarasan" },
-  ],
-  lendData: [
-    {
-      uuid: "97937726-f57e-4dd9-91dd-904b0c09dc13",
-      name: "Nishanh",
-      amount: 123,
-      type: "lend",
-      description: "Sdad",
-      date: "2022-04-04T00:00:00.000000Z",
-    },
-  ],
-  borrowData: [
-    {
-      uuid: "97937c9e-f645-4bf8-9cfe-4076964d512b",
-      name: "Nishanh",
-      amount: 23,
-      type: "borrow",
-      description: "Sdad",
-      date: "2022-04-04T00:00:00.000000Z",
-    },
-    {
-      uuid: "97937cf4-ad5d-4bed-864a-2efa49b92292",
-      name: "Nishanh",
-      amount: 23,
-      type: "borrow",
-      description: "Sdad",
-      date: "2022-04-04T00:00:00.000000Z",
-    },
-  ],
-  debtData: [
-    {
-      uuid: "97937726-ed55-42c4-897f-3fefbc13d31f",
-      name: "Nishanh",
-      lendTotal: 123,
-      borrowTotal: 46,
-      debts: [
-        {
-          uuid: "97937726-f57e-4dd9-91dd-904b0c09dc13",
-          type: "lend",
-          amount: 123,
-          description: "Sdad",
-          date: "2022-04-04T00:00:00.000000Z",
-        },
-        {
-          uuid: "97937c9e-f645-4bf8-9cfe-4076964d512b",
-          type: "borrow",
-          amount: 23,
-          description: "Sdad",
-          date: "2022-04-04T00:00:00.000000Z",
-        },
-        {
-          uuid: "97937cf4-ad5d-4bed-864a-2efa49b92292",
-          type: "borrow",
-          amount: 23,
-          description: "Sdad",
-          date: "2022-04-04T00:00:00.000000Z",
-        },
-      ],
-    },
-  ],
+  names: [],
+  lendData: [],
+  borrowData: [],
+  debtData: [],
+  loaded: false,
 };
 
 const debtSlice = createSlice({
   name: "debt",
   initialState,
   reducers: {
+    sendingHttpRequest(state) {
+      state.loaded = false;
+    },
+    getHttpRequest(state) {
+      state.loaded = true;
+    },
+    setInitialData(state, action) {
+      state.names = action.payload.names;
+      state.borrowData = action.payload.borrowData;
+      state.lendData = action.payload.lendData;
+      state.debtData = action.payload.debtData;
+      state.appToken = action.payload.token;
+    },
     createDebt(state, action) {
       if (action.payload.action == "lend") {
         const copyArray = state.lendData.slice();

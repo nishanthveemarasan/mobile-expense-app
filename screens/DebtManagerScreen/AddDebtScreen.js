@@ -24,7 +24,7 @@ import {
   deleteDebt,
   updateDebt,
 } from "../../store/reducer/debt-reducer";
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from "uuid";
 
 const AddDebtScreen = ({ navigation, route }) => {
   let params = route.params;
@@ -68,7 +68,6 @@ const AddDebtScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (params?.data) {
-      console.log(params.data);
       setDisabledSelect(false);
       setShowDeleteBUtton(true);
       setFormData((transaction) => {
@@ -87,17 +86,21 @@ const AddDebtScreen = ({ navigation, route }) => {
         return { ...copyData };
       });
     } else {
-      setFormData((prevState) => {
-        return {
-          ...prevState,
-          name: {
-            ...prevState.name,
-            value: state.users[1].value,
-          },
-        };
-      });
+      if (state.users.length > 0) {
+        setFormData((prevState) => {
+          return {
+            ...prevState,
+            name: {
+              ...prevState.name,
+              value: state.users[1].value,
+            },
+          };
+        });
+      } else {
+        setShowAddUser(true);
+      }
     }
-  }, []);
+  }, [params]);
 
   const onChangeFormData = (type, value) => {
     let formValue = value;
@@ -146,7 +149,6 @@ const AddDebtScreen = ({ navigation, route }) => {
           description: formData.description.value,
         },
       };
-      console.log(data);
       if (type == "save") {
         data.update = false;
         dispatch(addNewDebt(data, navigation));
@@ -157,12 +159,11 @@ const AddDebtScreen = ({ navigation, route }) => {
       }
     }
   };
-  console.log(formData);
   const onDeleteSavingHandler = () => {
     const data = {
       action: formData.type.value,
       formData: {
-        uuid: uuid(),
+        uuid: params.data.uuid,
         amount: restrictDecimalPlace(formData.amount.value),
         date: formData.date.value,
         type: formData.type.value,
@@ -279,15 +280,16 @@ const AddDebtScreen = ({ navigation, route }) => {
             <View style={{ flexDirection: "row" }}>
               <Label name="Description " />
               <Text style={styles.warningText}>
-                ({remainingChars(formData.description.value)} characters left)
+                ({remainingChars(formData.description.value, 30)} characters
+                left)
               </Text>
             </View>
             <Input
               type="default"
               placeHolder="Description -- optional"
-              multiLine={true}
+              multiLine={false}
               lines={2}
-              maxLength={50}
+              maxLength={30}
               inputType="description"
               onChange={onChangeFormData}
               value={formData.description.value}

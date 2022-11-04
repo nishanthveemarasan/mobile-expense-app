@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 const AddExpenseItem = ({ page }) => {
   const navigation = useNavigation();
   const onPageChangeHandler = () => {
-    navigation.navigate(page);
+    navigation.navigate(page, { action: "save" });
   };
   return (
     <View style={styles.rootContainer}>

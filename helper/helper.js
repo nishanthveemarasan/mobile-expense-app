@@ -31,11 +31,16 @@ export const getDateWithYYYYMMDD = (givenDate = null) => {
   return `${year}-${month}-${day}`;
 };
 
+export const getTimeStamp = (givenDate = null) => {
+  const date = new Date(getDateWithYYYYMMDD(givenDate));
+  return date.getTime();
+};
+
 export const restrictDecimalPlace = (amount) => {
   return Math.round(makeNumberPositive(amount) * 100) / 100;
 };
 
-const makeNumberPositive = (amount) => {
+export const makeNumberPositive = (amount) => {
   return Math.abs(amount);
 };
 const makeNumberNegative = (amount) => {
@@ -64,7 +69,7 @@ const getMonthNumber = (date) => {
 };
 
 export const remainingChars = (str, number = 50) => {
-  return str ? 50 - str.length : 50;
+  return str ? number - str.length : number;
 };
 
 export const getTotal = (arr, key) => {
@@ -75,7 +80,6 @@ export const getTotal = (arr, key) => {
 export const getTotalWithYear = (arr, key) => {
   let total = 0;
   let year = [];
-  console.log(arr);
   arr.forEach((item) => {
     if (!year.includes(item.year)) {
       year.push(item.year);
@@ -95,7 +99,6 @@ export const findIndex = (arr, key, value) => {
 
 export const getSummaryMonthlyWise = (data, year) => {
   let array = [];
-  console.log("inside");
   data.forEach((transaction) => {
     if (transaction.year == year) {
       const index = makeNumberPositive(transaction.month) - 1;

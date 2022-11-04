@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
-import { ColorArray } from "../../../../constants/colors";
+import { ColorArray, Colors } from "../../../../constants/colors";
 import {
   objKeysLength,
   restrictDecimalPlace,
@@ -31,7 +30,16 @@ const CategoryPieChart = ({ chartData }) => {
           <Text style={styles.text}>No Data to Show</Text>
         </View>
       ) : (
-        <>{chart.length > 0 && <PieGraph chartData={chart} />}</>
+        <>
+          {chart.length > 0 && (
+            <>
+              <View style={styles.summaryHeading}>
+                <Text style={styles.summaryText}>Expense Summary Chart</Text>
+              </View>
+              <PieGraph chartData={chart} />
+            </>
+          )}
+        </>
       )}
     </View>
   );
@@ -51,5 +59,16 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "ubuntu-bold",
+  },
+  summaryHeading: {
+    backgroundColor: Colors.primary900,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  summaryText: {
+    color: "white",
+    fontFamily: "ubuntu-regular",
+    textAlign: "center",
+    fontWeight: "bold",
   },
 });

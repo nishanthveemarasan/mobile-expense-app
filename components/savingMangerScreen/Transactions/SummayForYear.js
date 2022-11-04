@@ -5,7 +5,6 @@ import { restrictDecimalPlace } from "../../../helper/helper";
 
 const SummayForYear = ({ data }) => {
   const amount = data[data.length - 1];
-  console.log(amount);
   const amountColor =
     amount > 0 ? { color: Colors.success500 } : { color: Colors.danger400 };
   const onEditTransactionHandler = () => {

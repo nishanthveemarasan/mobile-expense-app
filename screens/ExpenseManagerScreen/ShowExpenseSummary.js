@@ -37,10 +37,13 @@ const ShowExpenseSummary = ({ route, navigation }) => {
   const [selectedDateGroup, setSelectedDateGroup] = useState([]);
   const [selectedDate, setSelectedDate] = useState({});
   const [mainData, setMainData] = useState(-1);
+
   useEffect(() => {
     navigation.setOptions({
       title: params.title,
     });
+    console.log("expense");
+    console.log(state.expenseData);
     setMainData(state.expenseData);
     const summary = getTtotalExpenseIncome(state.expenseData);
     setFilteredData({
@@ -61,31 +64,33 @@ const ShowExpenseSummary = ({ route, navigation }) => {
     if (mainData.length == 0) {
       return;
     }
+    const firstPayDate = mainData[mainData.length - 1].date;
+    const lastPayDate = mainData[0].date;
+
     if (type == "thisWeek") {
-      const dateArray = getWeeklyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
-      setFilteredData(filter);
+      const dateArray = getWeeklyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
+        setFilteredData(filter);
+      }
     } else if (type == "thisMonth") {
-      const dateArray = getMonthlyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
-      console.log(filter);
-      setFilteredData(filter);
+      const dateArray = getMonthlyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
+        setFilteredData(filter);
+      }
     } else if (type == "thisYear") {
-      const dateArray = getYearlyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
-      setFilteredData(filter);
+      const dateArray = getYearlyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        const filter = filterAllSummaryDataByDateGroup(mainData, dateArray[0]);
+        setFilteredData(filter);
+      }
     } else {
       setSelectedDateGroup([]);
       const filter = getTtotalExpenseIncome(mainData);

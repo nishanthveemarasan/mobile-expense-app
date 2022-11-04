@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import LinearGredientWrapper from "../../../components/wrapper/LinearGredientWrapper";
-import { Colors } from "../../../constants/colors";
+import LinearGredientWrapper from "../../../../components/wrapper/LinearGredientWrapper";
+import { Colors } from "../../../../constants/colors";
 import {
   getDateGroup,
   getDateWithYYYYMMDD,
   restrictDecimalPlace,
   splitStr,
-} from "../../../helper/helper";
-import { required } from "../../../helper/validator";
-import DatePicker from "../../../UI/DatePicker";
-import Eswitch from "../../../UI/Eswitch";
-import Input from "../../../UI/Input";
-import Label from "../../../UI/Label";
-import InputWithIcon from "../../../UI/InputWithIcon";
-import ECButton from "../../../UI/ECButton";
+} from "../../../../helper/helper";
+import { required } from "../../../../helper/validator";
+import DatePicker from "../../../../UI/DatePicker";
+import Eswitch from "../../../../UI/Eswitch";
+import Input from "../../../../UI/Input";
+import Label from "../../../../UI/Label";
+import InputWithIcon from "../../../../UI/InputWithIcon";
+import ECButton from "../../../../UI/ECButton";
 import {
   deleteExepenseItem,
   updateExepenseItem,
-} from "../../../store/reducer/expense-reducer";
+} from "../../../../store/reducer/expense-reducer";
 
 const UpdateExpenseItemScreen = ({ navigation, route }) => {
   const mapStateToProps = (state) => {
@@ -72,7 +72,7 @@ const UpdateExpenseItemScreen = ({ navigation, route }) => {
         value: restrictDecimalPlace(data.amount),
         valid: true,
       };
-      console.log(copyData);
+      // console.log(copyData);
       copyData.date = {
         ...copyData.date,
         value: getDateWithYYYYMMDD(data.date),
@@ -124,7 +124,6 @@ const UpdateExpenseItemScreen = ({ navigation, route }) => {
   };
 
   const onUpdateExpenseItemHandler = () => {
-    console.log(state.selectedExpenseItem);
     const dateGroup = getDateGroup(formData.date.value);
     const getCategory = splitStr(formData.category.value, ":");
     const data = {
@@ -144,7 +143,11 @@ const UpdateExpenseItemScreen = ({ navigation, route }) => {
     dispatch(updateExepenseItem(data, navigation));
   };
   const onDeleteExpenseItemHandler = () => {
-    dispatch(deleteExepenseItem(state.selectedExpenseItem, navigation));
+    const data = {
+      ...state.selectedExpenseItem,
+      newValue: 0,
+    };
+    dispatch(deleteExepenseItem(data, navigation));
   };
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>

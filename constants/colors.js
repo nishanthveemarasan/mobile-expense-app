@@ -21,6 +21,7 @@ export const Colors = {
   pink50: "#F5F5DC",
   purple100: "#800080",
   grey900: "#A9A9A9",
+  greyDark: "#3b473e",
 };
 
 export const ColorArray = [

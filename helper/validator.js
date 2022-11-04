@@ -1,3 +1,3 @@
-export const required = (str) => {
-  return str.trim().length > 0;
+export const required = (str = null) => {
+  return str ? str.trim().length > 0 : false;
 };

@@ -27,6 +27,7 @@ const AddSavingScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const params = route.params;
   const type = params.type;
+  // console.log(params.type);
 
   const [showDeleteBUtton, setShowDeleteBUtton] = useState(false);
   const [formData, setFormData] = useState({
@@ -51,7 +52,7 @@ const AddSavingScreen = ({ navigation, route }) => {
   });
   useEffect(() => {
     navigation.setOptions({
-      title: "Add Saving",
+      title: params.type == "edit" ? "Edit Saving" : "Add Saving",
     });
     if (params?.data) {
       setShowDeleteBUtton(true);
@@ -71,7 +72,7 @@ const AddSavingScreen = ({ navigation, route }) => {
         return { ...copyData };
       });
     }
-  }, []);
+  }, [params.type]);
 
   const onChangeFormData = (type, value) => {
     let formValue = value;
@@ -172,15 +173,16 @@ const AddSavingScreen = ({ navigation, route }) => {
             <View style={{ flexDirection: "row" }}>
               <Label name="Description " />
               <Text style={styles.warningText}>
-                ({remainingChars(formData.description.value)} characters left)
+                ({remainingChars(formData.description.value, 30)} characters
+                left)
               </Text>
             </View>
             <Input
               type="default"
-              placeHolder="Type the Description here -- optional"
-              multiLine={true}
+              placeHolder="Description -- optional"
+              multiLine={false}
               lines={2}
-              maxLength={50}
+              maxLength={30}
               inputType="description"
               onChange={onChangeFormData}
               value={formData.description.value}

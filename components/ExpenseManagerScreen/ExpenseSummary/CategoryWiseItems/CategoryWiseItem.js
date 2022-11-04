@@ -4,7 +4,7 @@ import { ColorArray, Colors } from "../../../../constants/colors";
 import { CUR } from "../../../../constants/months";
 import { getPercentage } from "../../../../helper/expense";
 import { Ionicons } from "@expo/vector-icons";
-import { getRandom } from "../../../../helper/helper";
+import { getRandom, toLower } from "../../../../helper/helper";
 const CategoryWiseItem = ({ data, category, balance, income }) => {
   const item = data[category];
   const navigation = useNavigation();
@@ -17,7 +17,7 @@ const CategoryWiseItem = ({ data, category, balance, income }) => {
   // const category = splitStr(data.selectedCategory, ":");
 
   const amountColor = {
-    color: category == "income" ? Colors.success450 : Colors.danger400,
+    color: toLower(category) == "income" ? Colors.success450 : Colors.danger400,
   };
   const borderColor = {
     borderLeftColor: ColorArray[getRandom(ColorArray.length)],

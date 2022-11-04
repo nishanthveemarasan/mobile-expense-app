@@ -40,11 +40,13 @@ const ExpenseSummary = () => {
         <ExpenseSummaryCategory
           title="Monthly Graph"
           type="income_expense_monthly_graph"
+          page="ShowIncomeExpenseMonthlyGraphScreen"
           onPress={onChangeSUmmaryHandler}
         />
         <ExpenseSummaryCategory
           title="Weekly Graph"
           type="income_expense_weekly_graph"
+          page="ShowIncomeExpenseWeeklyGraphScreen"
           onPress={onChangeSUmmaryHandler}
         />
       </ScrollViewWrapper>

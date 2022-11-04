@@ -10,6 +10,7 @@ import EActivityIndicator from "../UI/EActivityIndicator";
 import DebtSummary from "../components/DebtManagerScreen/DebtSummary";
 import LinearGredientWrapper from "../components/wrapper/LinearGredientWrapper";
 import { Colors } from "../constants/colors";
+import { getDebtData } from "../store/reducer/debt-reducer";
 
 const DebtManagerScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -17,9 +18,13 @@ const DebtManagerScreen = ({ navigation }) => {
   const mapStateToProps = (state) => {
     return {
       debtData: state.debtStore.debtData,
+      loaded: state.debtStore.loaded,
     };
   };
   const state = useSelector(mapStateToProps);
+  useEffect(() => {
+    dispatch(getDebtData());
+  }, []);
 
   let sum = {
     borrow: 0,
@@ -40,20 +45,26 @@ const DebtManagerScreen = ({ navigation }) => {
 
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>
-      <DebtSummary total={sum} />
-      <View style={styles.buttonOuterContainer}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.buttonContainer,
-            pressed ? styles.pressed : null,
-          ]}
-          onPress={onChangePageHandler}
-        >
-          <View>
-            <Text style={styles.buttonText}>Debt Manager</Text>
+      {state.loaded ? (
+        <>
+          <DebtSummary total={sum} />
+          <View style={styles.buttonOuterContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.buttonContainer,
+                pressed ? styles.pressed : null,
+              ]}
+              onPress={onChangePageHandler}
+            >
+              <View>
+                <Text style={styles.buttonText}>Debt Manager</Text>
+              </View>
+            </Pressable>
           </View>
-        </Pressable>
-      </View>
+        </>
+      ) : (
+        <EActivityIndicator />
+      )}
     </LinearGredientWrapper>
   );
 };

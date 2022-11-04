@@ -17,7 +17,7 @@ const ExpenseManagerScreen = ({ navigation }) => {
     if (state.expenseData.length == 0) {
       dispatch(getInitialExpenseData());
     }
-  }, [state.expenseData]);
+  }, []);
   return (
     <>{state.loading ? <ExpenseTopTabNavigator /> : <EActivityIndicator />}</>
   );

@@ -14,3 +14,8 @@ export const EXPENSE_TYPE = [
   { label: "This Month", value: "month" },
   { label: "This Year", value: "year" },
 ];
+
+export const RECURRING_TYPE = [
+  { label: "Weekly", value: "weekly" },
+  { label: "Monthly", value: "monthly" },
+];

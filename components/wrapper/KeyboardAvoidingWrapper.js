@@ -2,7 +2,7 @@ import { KeyboardAvoidingView } from "react-native";
 
 const KeyboardAvoidingWrapper = ({ children, style }) => {
   return (
-    <KeyboardAvoidingView behavior="position" style={style}>
+    <KeyboardAvoidingView behavior="padding" style={style}>
       {children}
     </KeyboardAvoidingView>
   );

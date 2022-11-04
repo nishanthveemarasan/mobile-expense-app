@@ -190,7 +190,7 @@ const AddExpenseItemScreen = ({ navigation }) => {
       );
       return false;
     } else {
-      dispatch(addNewExpense(transaction, navigation));
+      dispatch(addNewExpense({ expense: transaction }, navigation));
     }
 
     setFormData((prevState) => {

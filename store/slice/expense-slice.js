@@ -7,7 +7,8 @@ import {
   updateExpenseSummaryData,
   updateItemInExpenseArray,
 } from "../../helper/expense";
-import { getDateGroup } from "../../helper/helper";
+import { getDateGroup, getDateWithYYYYMMDD } from "../../helper/helper";
+import { required } from "../../helper/validator";
 
 const initialState = {
   loaded: false,
@@ -52,12 +53,55 @@ const initialState = {
   },
   selectedCategory: null,
   selectedExpenseItem: null,
+  recurringPayment: {
+    name: {
+      value: "",
+      valid: false,
+      validator: true,
+      error: "Please enter Payment description to continue the process",
+    },
+    amount: {
+      value: "",
+      valid: false,
+      validator: true,
+      error: "Please enter a valid amount to process your request!!",
+    },
+    pay_method: {
+      value: "weekly",
+      valid: true,
+      validator: false,
+    },
+    date: {
+      value: getDateWithYYYYMMDD(),
+      valid: true,
+      validator: false,
+    },
+    num_of_pay: {
+      value: 1,
+      valid: true,
+      validator: true,
+      error: "Please enter Number of Total Payment to continue the process",
+    },
+    category: {
+      value: "",
+      valid: false,
+      validator: true,
+      error: "Select a category to process your request!!",
+    },
+  },
+  checked_payment_number: false,
+  recurringDataArray: [],
+  recurringPayType: "expense",
+  selectedRecurringItem: null,
 };
 
 const expenseSlice = createSlice({
   name: "expense",
   initialState,
   reducers: {
+    setSelectedRecurringItem(state, action) {
+      state.selectedRecurringItem = action.payload.data;
+    },
     updateExpenseItem(state, action) {
       state.selectedExpenseItem = action.payload.data;
     },
@@ -79,7 +123,7 @@ const expenseSlice = createSlice({
     initialExpenseData(state, action) {
       state.payment.data.expense = action.payload.expense;
       state.payment.data.category = action.payload.category;
-      state.recurringData = action.payload.recurring;
+      state.recurringDataArray = action.payload.recurring;
       state.appToken = action.payload.token;
       state.payment.categoryNames = getCategoryNameArray(
         action.payload.category
@@ -158,7 +202,6 @@ const expenseSlice = createSlice({
     removeExpenseSummaryAndData(state, action) {
       const copySummary = { ...state.summary };
       const copyExpenseData = state.payment.data.expense.slice();
-
       const latestExpenseData = removeItemFromExpenseArray(
         copyExpenseData,
         action.payload.data
@@ -188,6 +231,177 @@ const expenseSlice = createSlice({
         action.payload.data
       );
       state.summary = newSummary;
+    },
+    updateRecurringFormData(state, action) {
+      const copyFormData = { ...state.recurringPayment };
+      let formValue = action.payload.value;
+      let valid = true;
+      if (copyFormData[action.payload.type].validator) {
+        valid = valid && required(formValue);
+      }
+      copyFormData[action.payload.type] = {
+        ...copyFormData[action.payload.type],
+        value: action.payload.value,
+        valid,
+      };
+      state.recurringPayment = { ...copyFormData };
+    },
+    updateRecurringPayType(state, action) {
+      state.recurringPayType = action.payload.type;
+      const copyFormData = { ...state.recurringPayment };
+      if (action.payload.type == "income") {
+        copyFormData.category = {
+          ...copyFormData.category,
+          value: "Income",
+          valid: true,
+        };
+      } else {
+        copyFormData.category = {
+          ...copyFormData.category,
+          value: "",
+          valid: false,
+        };
+      }
+      state.recurringPayment = { ...copyFormData };
+    },
+    updateRecurringPayCheckBox(state, action) {
+      state.checked_payment_number = action.payload.value;
+      const copyFormData = { ...state.recurringPayment };
+      copyFormData.num_of_pay = {
+        ...copyFormData.num_of_pay,
+        value: "",
+        valid: action.payload.value ? true : false,
+      };
+      state.recurringPayment = { ...copyFormData };
+    },
+    updateRecurringData(state, action) {
+      const copyArray = state.recurringDataArray.slice();
+      copyArray.unshift(action.payload.recurring_payment);
+      state.recurringDataArray = copyArray;
+
+      const copyExpense = state.payment.data.expense.slice();
+      if (action.payload.expense_data) {
+        const copySummary = { ...state.summary };
+        const copyYearArray = state.expenseYearArray.slice();
+        // console.log(copyYearArray);
+        const getNewExpenseSummary = getExpenseSummary(
+          copySummary,
+          state.dateGroup,
+          [action.payload.expense_data],
+          copyYearArray
+        );
+        state.expenseYearArray = [...getNewExpenseSummary.yearArray];
+        // console.log(state.expenseYearArray);
+        state.summary = {
+          ...state.summary,
+          ...getNewExpenseSummary.expenseSummary,
+        };
+        state.changeSummary = false;
+
+        copyExpense.unshift(action.payload.expense_data);
+        state.payment.data.expense = copyExpense;
+      }
+    },
+    clearRecurringData(state) {
+      state.recurringPayType = "expense";
+      state.checked_payment_number = false;
+      state.selectedCategory = null;
+      state.recurringPayment = {
+        name: {
+          value: "",
+          valid: false,
+          validator: true,
+          error: "Please enter Payment description to continue the process",
+        },
+        amount: {
+          value: "",
+          valid: false,
+          validator: true,
+          error: "Please enter a valid amount to process your request!!",
+        },
+        pay_method: {
+          value: "weekly",
+          valid: true,
+          validator: false,
+        },
+        date: {
+          value: getDateWithYYYYMMDD(),
+          valid: true,
+          validator: false,
+        },
+        num_of_pay: {
+          value: 1,
+          valid: true,
+          validator: true,
+          error: "Please enter Number of Total Payment to continue the process",
+        },
+        category: {
+          value: "",
+          valid: false,
+          validator: true,
+          error: "Select a category to process your request!!",
+        },
+      };
+    },
+    setRecurringFormDataForUpdate(state) {
+      let data = state.selectedRecurringItem;
+      state.recurringPayType = data.type;
+      state.checked_payment_number = data.num_of_pay == 0 ? true : false;
+      state.selectedCategory = data.category;
+      state.recurringPayment = {
+        name: {
+          value: data.name,
+          valid: true,
+          validator: true,
+          error: "Please enter Payment description to continue the process",
+        },
+        amount: {
+          value: data.amount,
+          valid: true,
+          validator: true,
+          error: "Please enter a valid amount to process your request!!",
+        },
+        pay_method: {
+          value: data.pay_method,
+          valid: true,
+          validator: false,
+        },
+        date: {
+          value: getDateWithYYYYMMDD(data.next_pay_date),
+          valid: true,
+          validator: false,
+        },
+        num_of_pay: {
+          value: data.num_of_pay,
+          valid: true,
+          validator: true,
+          error: "Please enter Number of Total Payment to continue the process",
+        },
+        category: {
+          value: data.category,
+          valid: true,
+          validator: true,
+          error: "Select a category to process your request!!",
+        },
+      };
+    },
+    updateExistingRecurringData(state, action) {
+      const data = action.payload.data;
+      const copyArray = state.recurringDataArray.slice();
+      const findIndex = copyArray.findIndex((el) => el.uuid == data.uuid);
+      copyArray[findIndex] = data;
+      state.recurringDataArray = copyArray;
+    },
+    deleteExistingRecurringData(state, action) {
+      const data = action.payload.data;
+      const copyArray = state.recurringDataArray.slice();
+      const findIndex = copyArray.findIndex((el) => el.uuid == data.uuid);
+      copyArray[findIndex] = {
+        ...copyArray[findIndex],
+        num_of_pay: data.num_of_pay,
+        status: data.status,
+      };
+      state.recurringDataArray = copyArray;
     },
   },
 });

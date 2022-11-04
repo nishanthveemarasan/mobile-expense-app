@@ -11,8 +11,6 @@ const GetDebtScreen = () => {
     };
   };
   const state = useSelector(mapStateToProps);
-  console.log("adad");
-  console.log(state.data);
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>
       {state.data.length == 0 ? (

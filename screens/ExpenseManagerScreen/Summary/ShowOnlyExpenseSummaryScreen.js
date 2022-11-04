@@ -45,7 +45,6 @@ const ShowOnlyExpenseSummaryScreen = ({ route, navigation }) => {
     });
     const summary = filterDataByType(state.expenseData, "expense");
     setMainData(summary.data);
-    console.log(summary);
     setFilteredData({
       data: summary.data,
       expense: parseFloat(summary.total, 2),
@@ -59,36 +58,41 @@ const ShowOnlyExpenseSummaryScreen = ({ route, navigation }) => {
       return;
     }
     // const date = state.date[type];
-    let filterData = {};
+    let filterData = {
+      data: [],
+      category: [],
+      total: 0,
+    };
     setCategoryStyleNo(num);
     setIndex(0);
 
+    const firstPayDate = mainData[mainData.length - 1].date;
+    const lastPayDate = mainData[0].date;
     if (type == "thisWeek") {
-      const dateArray = getWeeklyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      const dateArray = getWeeklyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      }
     } else if (type == "thisMonth") {
-      const dateArray = getMonthlyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      const dateArray = getMonthlyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      }
     } else if (type == "thisYear") {
-      const dateArray = getYearlyArrayDetails(
-        mainData[mainData.length - 1].date
-      );
-      setSelectedDateGroup(dateArray);
-      setSelectedDate(dateArray[0]);
-      filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      const dateArray = getYearlyArrayDetails(firstPayDate, lastPayDate);
+      if (dateArray.length > 0) {
+        setSelectedDateGroup(dateArray);
+        setSelectedDate(dateArray[0]);
+        filterData = filterDataByDateGroup(mainData, dateArray[0]);
+      }
     } else {
       filterData = filterDataByType(mainData, "expense");
       setSelectedDateGroup([]);
     }
-    console.log(filterData);
     setFilteredData({
       data: filterData.data,
       expense: parseFloat(filterData.total, 2),
@@ -99,9 +103,7 @@ const ShowOnlyExpenseSummaryScreen = ({ route, navigation }) => {
   const onDateCategoryChange = (i) => {
     setSelectedDate(selectedDateGroup[i]);
     setIndex(i);
-    console.log(mainData);
     const data = filterDataByDateGroup(mainData, selectedDateGroup[i]);
-    console.log();
     setFilteredData({
       data: data.data,
       expense: parseFloat(data.total, 2),
@@ -121,7 +123,11 @@ const ShowOnlyExpenseSummaryScreen = ({ route, navigation }) => {
         <DateCategoryButton onPress={onCategoryChange} />
       </View>
       <View>
-        <ShowTotalSummaryTypeWise total={filteredData.expense} title="Total Expense" type="expense" />
+        <ShowTotalSummaryTypeWise
+          total={filteredData.expense}
+          title="Total Expense"
+          type="expense"
+        />
       </View>
 
       {selectedDateGroup.length > 0 && (

@@ -1,9 +1,14 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../../constants/colors";
 import { CUR } from "../../../../constants/months";
-import { splitStr, upperCase } from "../../../../helper/helper";
+import {
+  restrictDecimalPlace,
+  splitStr,
+  upperCase,
+} from "../../../../helper/helper";
 
 const SpendItem = ({ data, showCategory, onEdit }) => {
+  // console.log(data);
   // const onEditDebtItemHAndler = () => {
   //   navigation.navigate("AddDebtScreen", {
   //     data,
@@ -49,7 +54,7 @@ const SpendItem = ({ data, showCategory, onEdit }) => {
       <View>
         <Text style={[styles.amountText, amountColor]}>
           {CUR}
-          {data.amount}
+          {restrictDecimalPlace(data.amount)}
         </Text>
       </View>
     </Pressable>

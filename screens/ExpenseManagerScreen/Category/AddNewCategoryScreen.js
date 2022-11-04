@@ -27,6 +27,7 @@ const AddNewCategoryScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
     category: "",
     items: [],
+    color: "primary",
   });
   useEffect(() => {
     let category = state.categoryNames[0].value;

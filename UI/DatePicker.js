@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     width: "85%",
-    paddingVertical: 8,
+    paddingVertical: 3,
   },
   pressed: {
     opacity: 0.7,
