@@ -1,9 +1,15 @@
 import { StyleSheet, View, Text, useWindowDimensions } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-import { restrictDecimalPlace } from "../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../helper/helper";
 
 const ExpenseBalaceDateWaise = ({ dateGroup, income, expense, balance }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   return (
     <View style={styles.rootContainer}>
       <View>
@@ -12,12 +18,11 @@ const ExpenseBalaceDateWaise = ({ dateGroup, income, expense, balance }) => {
       </View>
       <View>
         <Text style={styles.income}>
-          {CUR}
-          {restrictDecimalPlace(income)}
+          {numberFormat(income, state.currency)}
         </Text>
-        <Text style={styles.expense}>{`${CUR}${restrictDecimalPlace(
-          expense
-        )}`}</Text>
+        <Text style={styles.expense}>
+          {numberFormat(expense, state.currency)}
+        </Text>
       </View>
       <View style={styles.balanceContainer}>
         <Text
@@ -26,8 +31,7 @@ const ExpenseBalaceDateWaise = ({ dateGroup, income, expense, balance }) => {
             { color: balance > 0 ? Colors.success450 : Colors.danger400 },
           ]}
         >
-          {CUR}
-          {restrictDecimalPlace(balance)}
+          {numberFormat(balance, state.currency)}
         </Text>
       </View>
     </View>

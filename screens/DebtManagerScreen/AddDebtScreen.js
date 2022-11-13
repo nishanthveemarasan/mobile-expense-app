@@ -32,6 +32,7 @@ const AddDebtScreen = ({ navigation, route }) => {
   const mapStateToProps = (state) => {
     return {
       users: state.debtStore.names,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -92,7 +93,7 @@ const AddDebtScreen = ({ navigation, route }) => {
             ...prevState,
             name: {
               ...prevState.name,
-              value: state.users[1].value,
+              value: state.users[0].value,
             },
           };
         });
@@ -151,11 +152,11 @@ const AddDebtScreen = ({ navigation, route }) => {
       };
       if (type == "save") {
         data.update = false;
-        dispatch(addNewDebt(data, navigation));
+        dispatch(addNewDebt(data, navigation, state.token));
       } else if (type == "edit") {
         data.formData.uuid = params.data.uuid;
         data.update = true;
-        dispatch(updateDebt(data, navigation));
+        dispatch(updateDebt(data, navigation, state.token));
       }
     }
   };
@@ -171,7 +172,7 @@ const AddDebtScreen = ({ navigation, route }) => {
         description: formData.description.value,
       },
     };
-    dispatch(deleteDebt(data, navigation));
+    dispatch(deleteDebt(data, navigation, state.token));
   };
   const onOpenAddUSer = () => {
     if (!disabledSelect) {

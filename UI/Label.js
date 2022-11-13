@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 
-const Label = ({ name }) => {
+const Label = ({ name, style }) => {
   return (
     <View style={styles.rootContainer}>
-      <Text style={styles.labelText}>{name}</Text>
+      <Text style={[styles.labelText, style]}>{name}</Text>
     </View>
   );
 };

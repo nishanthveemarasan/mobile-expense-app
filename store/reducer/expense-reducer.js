@@ -1,5 +1,14 @@
 import { Alert } from "react-native";
-import { deleteAPI, getAPI, patchAPI, postAPI } from "../../helper/axios";
+import {
+  deleteAPI,
+  getAPI,
+  patchAPI,
+  postAPI,
+  sendDeleteAdminApi,
+  sendGetAdminApi,
+  sendPatchAdminApi,
+  sendPostAdminApi,
+} from "../../helper/axios";
 import { showError } from "../../helper/error";
 import { expenseStoreAction } from "../store";
 
@@ -7,7 +16,7 @@ export const getInitialExpenseData = (token) => {
   return async (dispatch) => {
     try {
       dispatch(expenseStoreAction.sendingHttpRequest());
-      const response = await getAPI("mobile/expenses/");
+      const response = await sendGetAdminApi("mobile/expenses/", token);
       dispatch(expenseStoreAction.initialExpenseData(response.data.data));
       dispatch(expenseStoreAction.calculateSummary());
       dispatch(expenseStoreAction.getHttpRequest());
@@ -17,29 +26,40 @@ export const getInitialExpenseData = (token) => {
   };
 };
 
-export const addNewExpense = (data, navigation) => {
+export const addNewExpense = (data, navigation, token) => {
   return async (dispatch) => {
     try {
       // console.log(data);
-      // let response = await postAPI("mobile/expenses/store", data);
-      console.log("insert data");
-      console.log(data.expense);
+      let response = await sendPostAdminApi(
+        "mobile/expenses/store",
+        data,
+        token
+      );
+      // console.log(response.data.data);
       dispatch(
         expenseStoreAction.savePayment({
-          data: data.expense,
+          data: response.data.data,
         })
       );
       navigation.navigate("ExpenseDashboard");
     } catch (error) {
+      console.log(error);
       showError(error.response.data);
     }
   };
 };
 
-export const addNewCategory = (data, navigation, action) => {
+export const addNewCategory = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      let response = await postAPI("mobile/expenses/category/store", data);
+      let response = await sendPostAdminApi(
+        "mobile/expenses/category/store",
+        data,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(
         expenseStoreAction.addNewCategory({ category: response.data.data })
       );
@@ -50,10 +70,16 @@ export const addNewCategory = (data, navigation, action) => {
   };
 };
 
-export const deleteExepenseItem = (data, navigation) => {
+export const deleteExepenseItem = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      let response = await deleteAPI(`mobile/expenses/${data.uuid}/delete`);
+      let response = await sendDeleteAdminApi(
+        `mobile/expenses/${data.uuid}/delete`,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(expenseStoreAction.removeExpenseSummaryAndData({ data }));
       navigation.goBack();
     } catch (error) {
@@ -62,13 +88,17 @@ export const deleteExepenseItem = (data, navigation) => {
   };
 };
 
-export const updateExepenseItem = (data, navigation) => {
+export const updateExepenseItem = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      const response = await patchAPI(
+      const response = await sendPatchAdminApi(
         `mobile/expenses/${data.uuid}/update`,
-        data
+        data,
+        token
       );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(expenseStoreAction.updateExpenseSummaryAndData({ data }));
       navigation.goBack();
     } catch (error) {
@@ -77,10 +107,17 @@ export const updateExepenseItem = (data, navigation) => {
   };
 };
 
-export const addRecurringItem = (data, navigation) => {
+export const addRecurringItem = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      let response = await postAPI("mobile/recurring/store", data);
+      let response = await sendPostAdminApi(
+        "mobile/recurring/store",
+        data,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(expenseStoreAction.updateRecurringData(response.data.data));
       dispatch(expenseStoreAction.clearRecurringData());
       navigation.navigate("ExpenseRecurring");
@@ -101,10 +138,17 @@ export const updateRecurringFormDataForUpdate = (navigation) => {
   };
 };
 
-export const updateRecurringPaymentItem = (data, navigation) => {
+export const updateRecurringPaymentItem = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      const response = await patchAPI(`mobile/recurring/${data.uuid}`, data);
+      const response = await sendPatchAdminApi(
+        `mobile/recurring/${data.uuid}`,
+        data,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(expenseStoreAction.updateExistingRecurringData(response.data));
       dispatch(expenseStoreAction.clearRecurringData());
       navigation.navigate("ExpenseRecurring");
@@ -114,14 +158,17 @@ export const updateRecurringPaymentItem = (data, navigation) => {
   };
 };
 
-export const deleteRecurringPaymentItem = (data, navigation) => {
+export const deleteRecurringPaymentItem = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      const response = await patchAPI(
+      const response = await sendPatchAdminApi(
         `mobile/recurring/${data.uuid}/stop`,
-        data
+        data,
+        token
       );
-      console.log(response);
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(expenseStoreAction.deleteExistingRecurringData({ data }));
       dispatch(expenseStoreAction.clearRecurringData());
       navigation.navigate("ExpenseRecurring");

@@ -2,7 +2,7 @@ import { Dimensions } from "react-native";
 import { BarChart } from "react-native-chart-kit";
 import { useSelector } from "react-redux";
 
-const LineGraph = ({ xAxis, yAxis, height }) => {
+const MultiBarChart = () => {
   const mapStateToProps = (state) => {
     return {
       currency: state.authStore.currency,
@@ -12,24 +12,30 @@ const LineGraph = ({ xAxis, yAxis, height }) => {
   return (
     <BarChart
       data={{
-        labels: xAxis,
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
         datasets: [
           {
-            data: yAxis,
+            data: [20, 45, 28, 80, 99, 43],
+            // color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
+          },
+          {
+            data: [200, 45, 28, 80, 99, 43],
+            // color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
           },
         ],
+        legend: ["Income", "Expense"],
       }}
-      width={Dimensions.get("window").width - 25}
-      height={height}
+      width={Dimensions.get("window").width - 16}
+      height={220}
       fromZero={true}
-      withInnerLines={false}
       yAxisLabel={state.currency.symbol}
-      showBarTops={true}
       showValuesOnTopOfBars={true}
+      showBarTops={true}
+      verticalLabelRotation={-30}
       chartConfig={{
-        backgroundColor: "#994b57",
-        backgroundGradientFrom: "#1cc910",
-        backgroundGradientTo: "#1cc910",
+        backgroundColor: "#1cc910",
+        backgroundGradientFrom: "#eff3ff",
+        backgroundGradientTo: "#efefef",
         decimalPlaces: 0,
         color: (opacity = 1) => `rgba(122, 13, 100, ${opacity})`,
         style: {
@@ -43,4 +49,4 @@ const LineGraph = ({ xAxis, yAxis, height }) => {
     />
   );
 };
-export default LineGraph;
+export default MultiBarChart;

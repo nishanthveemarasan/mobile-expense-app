@@ -2,9 +2,13 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { expenseStoreAction } from "../../store/store";
 const AddExpenseItem = ({ page }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const onPageChangeHandler = () => {
+    dispatch(expenseStoreAction.updateSelectedCategoryNull());
     navigation.navigate(page, { action: "save" });
   };
   return (

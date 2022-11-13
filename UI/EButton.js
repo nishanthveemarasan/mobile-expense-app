@@ -1,7 +1,13 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Colors } from "../constants/colors";
 
-const EButton = ({ name, color, onPressed }) => {
+const EButton = ({ name, color, onPressed, showIndicator }) => {
   const buttonColor = {
     backgroundColor: color,
   };
@@ -13,9 +19,23 @@ const EButton = ({ name, color, onPressed }) => {
         pressed ? styles.pressedButton : null,
       ]}
       onPress={onPressed}
+      disabled={showIndicator}
     >
-      <View style={[styles.buttonContainer, buttonColor]}>
-        <Text style={styles.labelText}>{name}</Text>
+      <View
+        style={[
+          styles.buttonContainer,
+          buttonColor,
+          showIndicator ? styles.disabled : null,
+        ]}
+      >
+        {!showIndicator ? (
+          <Text style={styles.labelText}>{name}</Text>
+        ) : (
+          <ActivityIndicator
+            animating={showIndicator}
+            color={Colors.primary1000}
+          />
+        )}
       </View>
     </Pressable>
   );
@@ -38,5 +58,8 @@ const styles = StyleSheet.create({
   },
   pressedButton: {
     opacity: 0.5,
+  },
+  disabled: {
+    backgroundColor: Colors.light500,
   },
 });

@@ -3,14 +3,22 @@ import Input from "./Input";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { expenseStoreAction } from "../store/store";
 
-const DatePicker = ({ value, type, onSetDate, disabled, onPress, action }) => {
+const InputWithIcon = ({
+  value,
+  type,
+  onSetDate,
+  disabled,
+  onPress,
+  action,
+}) => {
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   const onOpenDate = () => {
-    navigation.navigate("ShowExpenseCategoryScreen", {
-      action,
-    });
+    dispatch(expenseStoreAction.updateCAtegoryParentPage({ action }));
+    navigation.navigate("ShowExpenseCategoryScreen");
   };
 
   return (
@@ -41,7 +49,7 @@ const DatePicker = ({ value, type, onSetDate, disabled, onPress, action }) => {
     </>
   );
 };
-export default DatePicker;
+export default InputWithIcon;
 
 const styles = StyleSheet.create({
   rootContainer: {

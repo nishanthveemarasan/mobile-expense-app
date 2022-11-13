@@ -40,6 +40,7 @@ const initialState = {
       chart: {},
     },
     balance: 0,
+    categoryParentPage: null,
   },
   payment: {
     type: "expense",
@@ -99,6 +100,13 @@ const expenseSlice = createSlice({
   name: "expense",
   initialState,
   reducers: {
+    updateSelectedCategoryNull(state, action) {
+      state.selectedCategory = null;
+      state.recurringPayment.category.value = null;
+    },
+    updateCAtegoryParentPage(state, action) {
+      state.categoryParentPage = action.payload.action;
+    },
     setSelectedRecurringItem(state, action) {
       state.selectedRecurringItem = action.payload.data;
     },
@@ -161,6 +169,7 @@ const expenseSlice = createSlice({
       };
 
       const copyArray = state.payment.data.expense.slice();
+      console.log(copyArray, action.payload.data);
       const newArray = addNewDataToExpenseData(copyArray, action.payload.data);
       // const newArray = action.payload.data.concat(copyArray);
       state.payment = {

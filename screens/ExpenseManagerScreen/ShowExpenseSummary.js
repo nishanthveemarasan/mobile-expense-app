@@ -42,8 +42,6 @@ const ShowExpenseSummary = ({ route, navigation }) => {
     navigation.setOptions({
       title: params.title,
     });
-    console.log("expense");
-    console.log(state.expenseData);
     setMainData(state.expenseData);
     const summary = getTtotalExpenseIncome(state.expenseData);
     setFilteredData({

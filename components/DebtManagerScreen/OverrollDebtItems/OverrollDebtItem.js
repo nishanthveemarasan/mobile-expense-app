@@ -1,9 +1,16 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { numberFormat } from "../../../helper/helper";
 
 const OverrollDebtItem = ({ data, name }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const navigation = useNavigation();
   const onEditDebtItemHAndler = () => {
     const newData = {
@@ -41,8 +48,7 @@ const OverrollDebtItem = ({ data, name }) => {
       </View>
       <View>
         <Text style={[styles.amountText, amountColor]}>
-          {CUR}
-          {data.amount}
+          {numberFormat(data.amount, state.currency)}
         </Text>
       </View>
     </Pressable>

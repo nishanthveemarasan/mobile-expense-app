@@ -1,6 +1,5 @@
 import { Dimensions, ScrollView } from "react-native";
 import { PieChart } from "react-native-chart-kit";
-import { CUR } from "../../constants/months";
 
 const PieGraph = ({ chartData }) => {
   return (

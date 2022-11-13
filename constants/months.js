@@ -13,4 +13,3 @@ export const monthsName = [
   "Dec",
 ];
 
-export const CUR = "£";

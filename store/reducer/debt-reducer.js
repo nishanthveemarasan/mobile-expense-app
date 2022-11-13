@@ -1,25 +1,40 @@
 import { Alert } from "react-native";
-import { deleteAPI, getAPI, patchAPI, postAPI } from "../../helper/axios";
+import {
+  deleteAPI,
+  getAPI,
+  patchAPI,
+  postAPI,
+  sendDeleteAdminApi,
+  sendGetAdminApi,
+  sendPatchAdminApi,
+  sendPostAdminApi,
+} from "../../helper/axios";
+import { showError } from "../../helper/error";
 import { debtStoreAction } from "../store";
 
-export const getDebtData = () => {
+export const getDebtData = (token) => {
   return async (dispatch) => {
     try {
       dispatch(debtStoreAction.sendingHttpRequest());
-      let response = await getAPI("mobile/debts");
+      let response = await sendGetAdminApi("mobile/debts", token);
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(debtStoreAction.setInitialData(response.data.data));
-      dispatch(debtStoreAction.getHttpRequest());
     } catch (error) {
-      let msg = error.response.data.message;
-      Alert.alert("Action Failed!", msg);
+      showError(error.response.data);
     }
+    dispatch(debtStoreAction.getHttpRequest());
   };
 };
 
-export const addNewDebt = (data, navigation) => {
+export const addNewDebt = (data, navigation, token) => {
   return async (dispatch) => {
     try {
-      let response = await postAPI("mobile/debts/store", data);
+      let response = await sendPostAdminApi("mobile/debts/store", data, token);
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       const uuid = response.data.data;
       const newData = {
         ...data,
@@ -36,17 +51,23 @@ export const addNewDebt = (data, navigation) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
-      let msg = error.response.data.message;
-      Alert.alert("Action Failed!", msg);
+      showError(error.response.data);
     }
   };
 };
 
-export const updateDebt = (data, navigation) => {
+export const updateDebt = (data, navigation, token) => {
   return async (dispatch) => {
     try {
       const uuid = data.formData.uuid;
-      let response = await patchAPI(`mobile/debts/${uuid}/update`, data);
+      let response = await sendPatchAdminApi(
+        `mobile/debts/${uuid}/update`,
+        data,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(debtStoreAction.createDebt(data));
       dispatch(debtStoreAction.updateDebtData(data));
       if (data.action == "lend") {
@@ -55,17 +76,22 @@ export const updateDebt = (data, navigation) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
-      let msg = error.response.data.message;
-      Alert.alert("Action Failed!", msg);
+      showError(error.response.data);
     }
   };
 };
 
-export const deleteDebt = (data, navigation) => {
+export const deleteDebt = (data, navigation, token) => {
   return async (dispatch) => {
     try {
       const uuid = data.formData.uuid;
-      let response = await deleteAPI(`mobile/debts/${uuid}/delete`);
+      let response = await sendDeleteAdminApi(
+        `mobile/debts/${uuid}/delete`,
+        token
+      );
+      if (response.data.error) {
+        showError(error.response.data);
+      }
       dispatch(debtStoreAction.deleteDebtItem(data));
       dispatch(debtStoreAction.deleteDebtDataArray(data));
       if (data.action == "lend") {
@@ -74,8 +100,7 @@ export const deleteDebt = (data, navigation) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
-      let msg = error.response.data.message;
-      Alert.alert("Action Failed!", msg);
+      showError(error.response.data);
     }
   };
 };

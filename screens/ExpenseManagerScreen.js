@@ -10,12 +10,13 @@ const ExpenseManagerScreen = ({ navigation }) => {
     return {
       loading: state.expenseStore.loaded,
       expenseData: state.expenseStore.payment.data.expense,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
   useEffect(() => {
     if (state.expenseData.length == 0) {
-      dispatch(getInitialExpenseData());
+      dispatch(getInitialExpenseData(state.token));
     }
   }, []);
   return (

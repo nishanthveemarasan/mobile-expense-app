@@ -19,11 +19,12 @@ const DebtManagerScreen = ({ navigation }) => {
     return {
       debtData: state.debtStore.debtData,
       loaded: state.debtStore.loaded,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
   useEffect(() => {
-    dispatch(getDebtData());
+    dispatch(getDebtData(state.token));
   }, []);
 
   let sum = {

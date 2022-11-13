@@ -1,7 +1,36 @@
+import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import LogoutButton from "../components/DebtManagerScreen/NavigatorItem/LogoutButton";
 import LinearGredientWrapper from "../components/wrapper/LinearGredientWrapper";
+import { Colors } from "../constants/colors";
+import { logout } from "../store/reducer/auth-reducer";
 
 const HomeScreen = ({ navigation }) => {
+  const mapStateToProps = (state) => {
+    return {
+      userName: state.authStore.userName,
+      token: state.authStore.token,
+    };
+  };
+  const state = useSelector(mapStateToProps);
+  const dispatch = useDispatch();
+  let title = `Welcome ${state.userName}`;
+  useEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: Colors.primaryNormal,
+      },
+      title: title,
+      headerRight: () => (
+        <LogoutButton icon="ios-log-out" onAction={onLogoutHandler} />
+      ),
+    });
+  }, [state.userName]);
+
+  const onLogoutHandler = () => {
+    dispatch(logout(state.token, navigation));
+  };
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>
       <View style={styles.rootContainer}>
@@ -32,6 +61,7 @@ const HomeScreen = ({ navigation }) => {
           <Pressable
             style={styles.boxContainer}
             android_ripple={{ color: "white" }}
+            onPress={() => navigation.navigate("GeneralSettingScreen")}
           >
             <Text style={styles.text}>Settings</Text>
           </Pressable>

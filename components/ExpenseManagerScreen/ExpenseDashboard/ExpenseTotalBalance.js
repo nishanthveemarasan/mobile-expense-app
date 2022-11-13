@@ -1,8 +1,14 @@
 import { Colors } from "../../../constants/colors";
 import { StyleSheet, View, Text } from "react-native";
-import { CUR } from "../../../constants/months";
-import { restrictDecimalPlace } from "../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../helper/helper";
+import { useSelector } from "react-redux";
 const ExpenseTotalBalance = ({ balance }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   return (
     <View style={styles.rootContainer}>
       <View>
@@ -15,8 +21,7 @@ const ExpenseTotalBalance = ({ balance }) => {
             { color: balance > 0 ? Colors.success450 : Colors.danger400 },
           ]}
         >
-          {CUR}
-          {restrictDecimalPlace(balance)}
+          {numberFormat(balance, state.currency)}
         </Text>
       </View>
     </View>

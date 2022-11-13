@@ -1,9 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-import { restrictDecimalPlace } from "../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../helper/helper";
 
 const SummayForYear = ({ data }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const amount = data[data.length - 1];
   const amountColor =
     amount > 0 ? { color: Colors.success500 } : { color: Colors.danger400 };
@@ -19,9 +25,9 @@ const SummayForYear = ({ data }) => {
         <Text style={styles.dateText}>Total Saving</Text>
       </View>
       <View style={styles.amountContainer}>
-        <Text
-          style={[styles.amountText, amountColor]}
-        >{`${CUR}${amount}`}</Text>
+        <Text style={[styles.amountText, amountColor]}>
+          {numberFormat(amount, state.currency)}
+        </Text>
       </View>
     </View>
   );

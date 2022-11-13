@@ -44,7 +44,7 @@ export const makeNumberPositive = (amount) => {
   return Math.abs(amount);
 };
 const makeNumberNegative = (amount) => {
-  return Math.abs(amount);
+  return -Math.abs(amount);
 };
 
 export const getJSDate = (date) => {
@@ -122,20 +122,25 @@ const getSummaryAllMonths = (data) => {
   return array;
 };
 
-export const generateDropdownFormat = (arr) => {
+export const generateDropdownFormat = (arr, useIndex = false) => {
   let array = [];
-  arr.forEach((item) => {
+  arr.forEach((item, index) => {
     let element = {
       label: convertToString(item),
-      value: item,
+      value: useIndex ? index : item,
     };
     array.push(element);
   });
   return array;
 };
-
+export const includes = (arr, el) => {
+  return arr.includes(el);
+};
+export const type = (val) => {
+  return typeof val;
+};
 const convertToString = (val) => {
-  return val.toString();
+  return type(val) == "string" ? getFirstLetterUpperWord(val) : val.toString();
 };
 
 export const toLower = (str) => {
@@ -265,4 +270,29 @@ export const getRandom = (max) => {
 
 export const objKeysLength = (obj) => {
   return Object.keys(obj).length;
+};
+
+export const getMonthWithStartEndDateDetails = (currentDate = "") => {
+  const date = currentDate ? new Date(currentDate) : new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const day = date.getDate();
+  const monthString = (month + 1).toString().padStart(2, "0");
+  const dateString = day.toString().padStart(2, "0");
+
+  const today = `${year}-${monthString}-${dateString}`;
+  const LastDayOfMonth = new Date(year, month + 1, 0).getDate();
+  return {
+    today,
+    year,
+    month: month,
+    monthFirstDay: `${year}-${monthString}-01`,
+    lastMonthDay: `${year}-${monthString}-${LastDayOfMonth}`,
+  };
+};
+export const numberFormat = (amount, currency) => {
+  return Intl.NumberFormat(currency.locale, {
+    style: "currency",
+    currency: currency.code,
+  }).format(amount);
 };

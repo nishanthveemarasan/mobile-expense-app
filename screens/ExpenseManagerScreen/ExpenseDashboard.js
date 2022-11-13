@@ -15,7 +15,7 @@ import { Colors } from "../../constants/colors";
 import AddExpenseItem from "./AddExpenseItem";
 
 const ExpenseDashboard = () => {
-  const [chartKey, setChartKey] = useState("week");
+  const [chartKey, setChartKey] = useState("today");
   const [chartData, setChartData] = useState({});
   const dispatch = useDispatch();
 
@@ -27,6 +27,9 @@ const ExpenseDashboard = () => {
     };
   };
   const state = useSelector(mapStateToProps);
+  useEffect(() => {
+    setChartData(state.summary[chartKey].chart);
+  }, [state.summary, state.expenseData]);
 
   const changeChartKeyHandler = (type, key) => {
     setChartKey(key);

@@ -1,10 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-import { restrictDecimalPlace } from "../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../helper/helper";
 
 const TransactionItem = ({ data }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const navigation = useNavigation();
   const borderLeftColor =
     data.amount > 0 ? styles.positiveBorderColor : styles.negativeBorderColor;
@@ -33,7 +39,7 @@ const TransactionItem = ({ data }) => {
       </View>
       <View style={styles.amountContainer}>
         <Text style={[styles.amountText, amountColor]}>
-          {CUR + restrictDecimalPlace(data.amount)}
+          {numberFormat(data.amount, state.currency)}
         </Text>
       </View>
     </Pressable>

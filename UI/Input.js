@@ -12,6 +12,8 @@ const Input = ({
   onChange,
   inputType,
   editable,
+  secure,
+  autoCapitalize,
 }) => {
   const [textValue, setTextValue] = useState();
   useEffect(() => {
@@ -32,9 +34,11 @@ const Input = ({
         numberOfLines={lines}
         maxLength={maxLength ? maxLength : null}
         value={textValue}
+        secureTextEntry={secure}
         onChangeText={onChangeTextHandler}
         editable={editable}
         returnKeyLabel="next"
+        autoCapitalize={autoCapitalize}
       />
     </View>
   );

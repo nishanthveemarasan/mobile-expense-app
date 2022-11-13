@@ -1,12 +1,17 @@
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-import { getFirstLetterUpperWord } from "../../../helper/helper";
+import { getFirstLetterUpperWord, numberFormat } from "../../../helper/helper";
 import { expenseStoreAction } from "../../../store/store";
 
 const RecurrigPayItem = ({ item }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const totalPay =
@@ -32,7 +37,7 @@ const RecurrigPayItem = ({ item }) => {
           </Text>
         </View>
         <View>
-          <Text style={styles.amountText}>{`${CUR}${item.amount}`}</Text>
+          <Text style={styles.amountText}>{`${numberFormat(item.amount,state.currency)}`}</Text>
         </View>
       </View>
       <View style={styles.cycleContainer}>

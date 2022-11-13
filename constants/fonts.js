@@ -9,4 +9,5 @@ export const FONTS = {
   "ubuntu-medium": require("../assets/fonts/ubuntu/Ubuntu-Medium.ttf"),
   "ubuntu-medium-italic": require("../assets/fonts/ubuntu/Ubuntu-MediumItalic.ttf"),
   "font-arial": require("../assets/fonts/unicode.arialr.ttf"),
+  "anton-regular": require("../assets/fonts/Anton/Anton-Regular.ttf"),
 };

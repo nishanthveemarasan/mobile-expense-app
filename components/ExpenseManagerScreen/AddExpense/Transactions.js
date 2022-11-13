@@ -2,9 +2,15 @@ import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import LinearGredientWrapper from "../../wrapper/LinearGredientWrapper";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-import { restrictDecimalPlace } from "../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../helper/helper";
+import { useSelector } from "react-redux";
 const Transactions = ({ data, onDeletePressed }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const onDeleteItemHander = (uuid) => {
     onDeletePressed(uuid);
   };
@@ -14,8 +20,8 @@ const Transactions = ({ data, onDeletePressed }) => {
     };
     const amount =
       item.type == "income"
-        ? `${CUR}${restrictDecimalPlace(item.amount)}`
-        : `-${CUR}${restrictDecimalPlace(item.amount)}`;
+        ? numberFormat(item.amount, state.currency)
+        : `${numberFormat(item.amount, state.currency)}`;
     return (
       <View style={styles.itemContainer}>
         <View style={styles.leftContainer}>

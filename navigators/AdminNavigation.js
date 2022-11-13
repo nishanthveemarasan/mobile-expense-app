@@ -1,23 +1,26 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Colors } from "../constants/colors";
-import DebtManagerScreen from "../screens/DebtManagerScreen";
-import AddDebtScreen from "../screens/DebtManagerScreen/AddDebtScreen";
-import DebtCategoryScreen from "../screens/DebtManagerScreen/DebtCategoryScreen";
-import OverAllDebtItemsScreen from "../screens/DebtManagerScreen/OverAllDebtItemsScreen";
-import ExpenseManagerScreen from "../screens/ExpenseManagerScreen";
-import AddNewCategoryScreen from "../screens/ExpenseManagerScreen/Category/AddNewCategoryScreen";
-import AddExpenseItemScreen from "../screens/ExpenseManagerScreen/Dashboard/AddExpenseItemScreen";
-import ShowExpenseCategoryScreen from "../screens/ExpenseManagerScreen/Dashboard/ShowExpenseCategoryScreen";
-import AddRecurringPaymentScreen from "../screens/ExpenseManagerScreen/Recurring/AddRecurringPaymentScreen";
-import ShowRecurringPaymentItemScreen from "../screens/ExpenseManagerScreen/Recurring/ShowRecurringPaymentItemScreen";
-import ShowExpenseSummary from "../screens/ExpenseManagerScreen/ShowExpenseSummary";
-import ShowOnlyExpenseSummaryScreen from "../screens/ExpenseManagerScreen/Summary/ShowOnlyExpenseSummaryScreen";
-import ShowOnlyIncomeSummaryScreen from "../screens/ExpenseManagerScreen/Summary/ShowOnlyIncomeSummaryScreen";
-import CategoryExpenseItemsScreen from "../screens/ExpenseManagerScreen/SummaryCategoryWise/CategoryExpenseItemsScreen";
-import UpdateExpenseItemScreen from "../screens/ExpenseManagerScreen/SummaryCategoryWise/UpdateExpenseItem/UpdateExpenseItemScreen";
-import HomeScreen from "../screens/HomeScreen";
-import SavingManagerScreen from "../screens/SavingManagerScreen";
-import AddSavingScreen from "../screens/savingsMangerScreen/AddSavingScreen";
+import DebtManagerScreen from "./screens/DebtManagerScreen";
+import AddDebtScreen from "./screens/DebtManagerScreen/AddDebtScreen";
+import DebtCategoryScreen from "./screens/DebtManagerScreen/DebtCategoryScreen";
+import OverAllDebtItemsScreen from "./screens/DebtManagerScreen/OverAllDebtItemsScreen";
+import ExpenseManagerScreen from "./screens/ExpenseManagerScreen";
+import AddNewCategoryScreen from "./screens/ExpenseManagerScreen/Category/AddNewCategoryScreen";
+import AddExpenseItemScreen from "./screens/ExpenseManagerScreen/Dashboard/AddExpenseItemScreen";
+import ShowExpenseCategoryScreen from "./screens/ExpenseManagerScreen/Dashboard/ShowExpenseCategoryScreen";
+import AddRecurringPaymentScreen from "./screens/ExpenseManagerScreen/Recurring/AddRecurringPaymentScreen";
+import ShowRecurringPaymentItemScreen from "./screens/ExpenseManagerScreen/Recurring/ShowRecurringPaymentItemScreen";
+import ShowExpenseSummary from "./screens/ExpenseManagerScreen/ShowExpenseSummary";
+import ShowOnlyExpenseSummaryScreen from "./screens/ExpenseManagerScreen/Summary/ShowOnlyExpenseSummaryScreen";
+import ShowOnlyIncomeSummaryScreen from "./screens/ExpenseManagerScreen/Summary/ShowOnlyIncomeSummaryScreen";
+import CategoryExpenseItemsScreen from "./screens/ExpenseManagerScreen/SummaryCategoryWise/CategoryExpenseItemsScreen";
+import HomeScreen from "./screens/HomeScreen";
+import UpdateExpenseItemScreen from "./screens/ExpenseManagerScreen/SummaryCategoryWise/UpdateExpenseItem/UpdateExpenseItemScreen";
+import SavingManagerScreen from "./screens/SavingManagerScreen";
+import AddSavingScreen from "./screens/savingsMangerScreen/AddSavingScreen";
+import ShowIncomeExpenseMonthlyGraphScreen from "./screens/ExpenseManagerScreen/Summary/ShowIncomeExpenseMonthlyGraphScreen";
+import ShowIncomeExpenseWeeklyGraphScreen from "./screens/ExpenseManagerScreen/Summary/ShowIncomeExpenseWeeklyGraphScreen";
+
 const Stack = createNativeStackNavigator();
 const AdminNavigation = () => {
   return (
@@ -68,6 +71,14 @@ const AdminNavigation = () => {
         options={{
           title: "Add Main/Add Categories",
         }}
+      />
+      <Stack.Screen
+        name="ShowIncomeExpenseMonthlyGraphScreen"
+        component={ShowIncomeExpenseMonthlyGraphScreen}
+      />
+      <Stack.Screen
+        name="ShowIncomeExpenseWeeklyGraphScreen"
+        component={ShowIncomeExpenseWeeklyGraphScreen}
       />
       <Stack.Screen
         name="UpdateExpenseItemScreen"

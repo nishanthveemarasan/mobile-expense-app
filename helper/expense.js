@@ -345,21 +345,42 @@ export const filterDataByDateGroupByType = (dataArray, dateGroup, type) => {
 };
 
 export const addNewDataToExpenseData = (data, newData) => {
-  let previousFirstPayDate = new Date(data[data.length - 1].date);
-  let previousLastPayDate = new Date(data[0].date);
-  newData.forEach((item) => {
-    const currentPayDate = new Date(item.date);
-
-    if (previousFirstPayDate.getTime() >= currentPayDate.getTime()) {
-      previousFirstPayDate = currentPayDate;
-      data.push(item);
-    } else if (previousLastPayDate.getTime() <= currentPayDate.getTime()) {
-      data.unshift(item);
+  if (data.length == 0) {
+    if (newData.length == 1) {
+      data.push(newData[0]);
     } else {
-      let lastIndex = data.length - 1;
-      data.splice(lastIndex - 1, 0, item);
+      let previousFirstPayDate = new Date(newData[newData.length - 1].date);
+      let previousLastPayDate = new Date(newData[0].date);
+      newData.forEach((item) => {
+        const currentPayDate = new Date(item.date);
+        if (previousFirstPayDate.getTime() >= currentPayDate.getTime()) {
+          previousFirstPayDate = currentPayDate;
+          data.push(item);
+        } else if (previousLastPayDate.getTime() <= currentPayDate.getTime()) {
+          data.unshift(item);
+        } else {
+          let lastIndex = data.length - 1;
+          data.splice(lastIndex - 1, 0, item);
+        }
+      });
     }
-  });
+  } else {
+    let previousFirstPayDate = new Date(data[data.length - 1].date);
+    let previousLastPayDate = new Date(data[0].date);
+    newData.forEach((item) => {
+      const currentPayDate = new Date(item.date);
+
+      if (previousFirstPayDate.getTime() >= currentPayDate.getTime()) {
+        previousFirstPayDate = currentPayDate;
+        data.push(item);
+      } else if (previousLastPayDate.getTime() <= currentPayDate.getTime()) {
+        data.unshift(item);
+      } else {
+        let lastIndex = data.length - 1;
+        data.splice(lastIndex - 1, 0, item);
+      }
+    });
+  }
   return data;
 };
 export const removeItemFromExpenseArray = (expenseData, singleData) => {
@@ -525,7 +546,8 @@ export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
 
   let totalIncome = 0;
   let totalExpense = 0;
-  let NoOfMonthsSpended = 0;
+  let totalBalance = 0;
+  // let NoOfMonthsSpended = 0;
 
   monthsName.forEach((month, i) => {
     let currentMonthExpense = restrictDecimalPlace(data[month].expense);
@@ -540,13 +562,13 @@ export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
       if (i <= currentDate.month) {
         chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
         chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
-        if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
+        // if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
       } else {
         chartYIncomeAxis.push(null);
         chartYExpenseAxis.push(null);
       }
     } else {
-      if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
+      // if (currentMonthExpense > 0) NoOfMonthsSpended += 1;
       chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
       chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
     }
@@ -555,6 +577,9 @@ export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
 
     income.push(restrictDecimalPlace(data[month].income));
   });
+  let foramattedTotalIncome = restrictDecimalPlace(totalIncome);
+  let foramattedTotalExpense = restrictDecimalPlace(totalExpense);
+  let balance = foramattedTotalIncome - foramattedTotalExpense;
   const summaryChartInTotal = {
     series: [
       {
@@ -569,9 +594,10 @@ export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
       },
     ],
     legends: ["Income", "Expense"],
-    totalIncome: restrictDecimalPlace(totalIncome),
-    totalExpense: restrictDecimalPlace(totalExpense),
-    avgSpending: restrictDecimalPlace(totalExpense / NoOfMonthsSpended),
+    totalIncome: foramattedTotalIncome,
+    totalExpense: foramattedTotalExpense,
+    totalBalance: balance,
+    // avgSpending: restrictDecimalPlace(totalExpense / NoOfMonthsSpended),
     labels: monthsName,
   };
   return {
@@ -596,4 +622,265 @@ export const extractMonthlyExpenseIncomeDataValues = (data, selectedYear) => {
 const getLabelsForTotal = (array) => {
   array.unshift("");
   return array;
+};
+
+export const getWeekStartEndDetails = (firstDayOfWeek) => {
+  const lastDayOfWeek = new Date(firstDayOfWeek);
+  const dayWeek = firstDayOfWeek.getDay() == 0 ? 7 : firstDayOfWeek.getDay();
+  firstDayOfWeek.setDate(firstDayOfWeek.getDate() - (dayWeek - 1));
+  lastDayOfWeek.setDate(lastDayOfWeek.getDate() + (7 - dayWeek));
+
+  return {
+    dateStart: `${firstDayOfWeek.getFullYear()}-${(
+      firstDayOfWeek.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${firstDayOfWeek
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`,
+    dateEnd: `${lastDayOfWeek.getFullYear()}-${(lastDayOfWeek.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${lastDayOfWeek
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`,
+    dayStart: firstDayOfWeek.getDate(),
+    dayStartYear: firstDayOfWeek.getFullYear(),
+    dayWeekStart: `${(firstDayOfWeek.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${firstDayOfWeek
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`,
+    dayWeekEnd: `${(lastDayOfWeek.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${lastDayOfWeek
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`,
+    dayStartMonth: firstDayOfWeek.getMonth() + 1,
+    dayEnd: lastDayOfWeek.getDate(),
+    dayEndYear: lastDayOfWeek.getFullYear(),
+    dayEndMonth: lastDayOfWeek.getMonth() + 1,
+  };
+};
+
+const getWeeklyArrayChartDetails = (firstpayDate, lastPayDate, givenDate) => {
+  let firstDayOfWeek = new Date(firstpayDate);
+  let lastDayWeek = new Date(lastPayDate);
+  let details;
+  let week = [];
+  let currentWeek = "";
+  const today = new Date(givenDate).getTime();
+
+  let i = 1;
+  while (firstDayOfWeek.getTime() <= lastDayWeek.getTime()) {
+    details = getWeekStartEndDetails(firstDayOfWeek);
+    if (
+      today >= new Date(details.dateStart).getTime() &&
+      today <= new Date(details.dateEnd).getTime() &&
+      !currentWeek
+    ) {
+      currentWeek = `week${i}`;
+    }
+
+    week.push({
+      dateStart: details.dateStart,
+      dateEnd: details.dateEnd,
+      dayStart: details.dayStart,
+      dayEnd: details.dayEnd,
+      weekRange: `${details.dayWeekStart} - ${details.dayWeekEnd}`,
+      week: `week${i}`,
+      dayStartMonth: details.dayStartMonth,
+      dayEndMonth: details.dayEndMonth,
+      dayStartYear: details.dayStartYear,
+      dayEndYear: details.dayEndYear,
+    });
+
+    const lastfirstDayOfWeek = new Date(details.dateEnd);
+    lastfirstDayOfWeek.setDate(lastfirstDayOfWeek.getDate() + 1);
+    firstDayOfWeek = new Date(lastfirstDayOfWeek);
+    i++;
+  }
+
+  return { week, currentWeek };
+};
+
+export const weeklyChartData = (data, firstpayDate, lastPayDate, today) => {
+  const weeklyDetails = getWeeklyArrayChartDetails(
+    firstpayDate,
+    lastPayDate,
+    today
+  );
+  const weeklyArrayDetails = weeklyDetails.week;
+  const currentWeek = weeklyDetails.currentWeek;
+
+  const weeklyChartData = [];
+  const category = [];
+  let limit = 0;
+  data.forEach((item) => {
+    weeklyArrayDetails.forEach((week) => {
+      if (!weeklyChartData[week.week]) {
+        weeklyChartData[week.week] = {
+          expense: 0,
+          income: 0,
+          weekRange: week.weekRange,
+          category: [],
+        };
+      }
+      const dayStart = new Date(week.dateStart).getTime();
+      const dateEnd = new Date(week.dateEnd).getTime();
+      if (
+        new Date(item.date).getTime() >= dayStart &&
+        new Date(item.date).getTime() <= dateEnd
+      ) {
+        const amount = Math.abs(item.amount);
+
+        if (amount > limit) {
+          limit = amount;
+        }
+        if (!weeklyChartData[week.week].category[item.category]) {
+          weeklyChartData[week.week].category[item.category] = 0;
+        }
+        if (item.type.toLowerCase() == "expense") {
+          weeklyChartData[week.week].expense += amount;
+        } else {
+          weeklyChartData[week.week].income += amount;
+        }
+        weeklyChartData[week.week].category[item.category] += amount;
+
+        if (!category.includes(item.category)) {
+          category.push(item.category);
+        }
+        return;
+      }
+    });
+  });
+
+  return { weeklyChartData, category, limit, currentWeek };
+};
+
+export const generateWeeklyExpenseAndIncomeChartColumnData = (data) => {
+  const labels = [];
+  let expense = [];
+  let income = [];
+  let categoryWise = [];
+
+  let totalIncome = 0;
+  let totalExpense = 0;
+  let NoOfWeeksSpended = 0;
+
+  let chartYIncomeAxis = [];
+  let chartYExpenseAxis = [];
+
+  const weeklyChartData = data.weeklyChartData;
+  const currentWeek = data.currentWeek;
+  const currentWeekLastIndex = currentWeek.slice(-1);
+  const currentWeekIndex = currentWeekLastIndex ? currentWeekLastIndex : 0;
+
+  const weeklyChartCategory = data.category;
+  let i = 1;
+  for (let weekly in weeklyChartData) {
+    let key = `week${i}`;
+    // console.log(currentWeekIndex, i);
+    const chartKey = weeklyChartData[key];
+    let chartKeyExpense = restrictDecimalPlace(chartKey.expense);
+    let chartKeyIncome = restrictDecimalPlace(chartKey.income);
+    totalIncome += chartKeyIncome;
+    totalExpense += chartKeyExpense;
+    if (i == 1) {
+      // chartYIncomeAxis.push(null);
+      // chartYExpenseAxis.push(null);
+    }
+    if (currentWeekIndex == 0) {
+      chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
+      chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
+      if (chartKeyExpense > 0) {
+        NoOfWeeksSpended += 1;
+      }
+    } else {
+      if (i <= currentWeekIndex) {
+        chartYIncomeAxis.push(restrictDecimalPlace(totalIncome));
+        chartYExpenseAxis.push(restrictDecimalPlace(totalExpense));
+        if (chartKeyExpense > 0) {
+          NoOfWeeksSpended += 1;
+        }
+      } else {
+        // chartYIncomeAxis.push(null);
+        // chartYExpenseAxis.push(null);
+      }
+    }
+
+    // if (chartKeyExpense > 0) {
+    //     NoOfWeeksSpended += 1;
+    // }
+    labels.push(chartKey.weekRange);
+
+    expense.push(chartKeyExpense);
+    income.push(chartKeyIncome);
+
+    weeklyChartCategory.forEach((category) => {
+      if (!categoryWise[category]) {
+        categoryWise[category] = [];
+      }
+      const value = chartKey.category[category]
+        ? restrictDecimalPlace(chartKey.category[category])
+        : 0;
+
+      categoryWise[category].push(value);
+    });
+    i++;
+  }
+
+  const series = [
+    {
+      data: income,
+      color: (opacity = 1) => `rgba(10, 94, 7, ${opacity})`,
+      strokeWidth: 2,
+    },
+    {
+      data: expense,
+      color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
+      strokeWidth: 2,
+    },
+  ];
+
+  const legends = ["Income", "Expense"];
+
+  const seriesForTotal = [
+    {
+      data: chartYIncomeAxis,
+      color: (opacity = 1) => `rgba(10, 94, 7, ${opacity})`,
+      strokeWidth: 2,
+    },
+    {
+      data: chartYExpenseAxis,
+      color: (opacity = 1) => `rgba(163, 15, 5, ${opacity})`,
+      strokeWidth: 2,
+    },
+  ];
+  const tIncome = restrictDecimalPlace(totalIncome);
+  const tExpense = restrictDecimalPlace(totalExpense);
+  const summary = {
+    income: restrictDecimalPlace(totalIncome),
+    expense: restrictDecimalPlace(totalExpense),
+    balance: tIncome - tExpense,
+  };
+
+  const summaryChartInTotal = {
+    seriesForTotal,
+  };
+  return {
+    series,
+    legends,
+    labels,
+    categoryWise,
+    summary,
+    summaryChartInTotal,
+  };
+};
+
+export const padStart = (num) => {
+  return num.toString().padStart(2, "0");
 };

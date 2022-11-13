@@ -1,7 +1,13 @@
 import { Dimensions, ScrollView, Text, View } from "react-native";
 import { LineChart } from "react-native-chart-kit";
-import { CUR } from "../../../constants/months";
+import { useSelector } from "react-redux";
 const SummaryLineGraph = ({ xAxis, yAxis, height }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   return (
     <ScrollView horizontal={true}>
       <LineChart
@@ -15,7 +21,7 @@ const SummaryLineGraph = ({ xAxis, yAxis, height }) => {
         }}
         width={Dimensions.get("window").width - 16} // from react-native
         height={height}
-        yAxisLabel={CUR}
+        yAxisLabel={state.currency.symbol}
         fromZero={true}
         verticalLabelRotation={-30}
         yLabelsOffset={5}

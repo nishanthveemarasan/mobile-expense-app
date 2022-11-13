@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LinearGredientWrapper from "../../components/wrapper/LinearGredientWrapper";
 import {
   getDateModules,
@@ -24,6 +24,12 @@ import Eselector from "../../UI/Eselector";
 import { ADD_SAVINGS } from "../../constants/SelectItems";
 import { required } from "../../helper/validator";
 const AddSavingScreen = ({ navigation, route }) => {
+  const mapStateToProps = (state) => {
+    return {
+      token: state.authStore.token,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const dispatch = useDispatch();
   const params = route.params;
   const type = params.type;
@@ -124,16 +130,16 @@ const AddSavingScreen = ({ navigation, route }) => {
         year: dateModules.year,
       };
       if (type == "save") {
-        dispatch(addNewSaving(data, navigation));
+        dispatch(addNewSaving(data, navigation, state.token));
       } else if (type == "edit") {
         data.uuid = params.data.uuid;
-        dispatch(updateSaving(data, navigation));
+        dispatch(updateSaving(data, navigation, state.token));
       }
     }
   };
 
   const onDeleteSavingHandler = () => {
-    dispatch(deleteSaving(params.data.uuid, navigation));
+    dispatch(deleteSaving(params.data.uuid, navigation, state.token));
   };
 
   return (

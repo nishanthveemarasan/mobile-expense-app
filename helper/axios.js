@@ -20,3 +20,32 @@ export const patchAPI = async (url, data) => {
 export const deleteAPI = async (url) => {
   return await API.delete(url);
 };
+export const sendGetAdminApi = (url, token) => {
+  return API.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const sendPostAdminApi = (url, data, token) => {
+  return API.post(url, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const sendPatchAdminApi = (url, data, token) => {
+  return API.patch(url, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const sendDeleteAdminApi = (url, token) => {
+  return API.delete(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

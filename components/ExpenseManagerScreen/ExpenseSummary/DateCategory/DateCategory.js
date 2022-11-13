@@ -33,7 +33,7 @@ const DateCategory = ({ data, change, curIndex }) => {
       <FlatList
         data={data}
         renderItem={onDisplayDateHandler}
-        keyExtractor={(item, index) => item.uuid}
+        keyExtractor={(item, index) => index}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       />

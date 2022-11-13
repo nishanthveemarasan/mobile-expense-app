@@ -2,12 +2,12 @@ import { View, Text, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import LinearGredientWrapper from "../../components/wrapper/LinearGredientWrapper";
 import { Colors } from "../../constants/colors";
-import { CUR } from "../../constants/months";
-import { getTodayWithMonthName } from "../../helper/helper";
+import { getTodayWithMonthName, numberFormat } from "../../helper/helper";
 const SavingSummary = () => {
   const mapStateToProps = (state) => {
     return {
       data: state.savingStore.savingTotal,
+      currency: state.authStore.currency,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -18,7 +18,9 @@ const SavingSummary = () => {
           <Text style={styles.headingText}>Total Saving</Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text style={styles.amount}>{`${CUR}${state.data}`}</Text>
+          <Text style={styles.amount}>
+            {numberFormat(state.data, state.currency)}
+          </Text>
         </View>
         <View>
           <Text style={styles.dateText}>
@@ -40,15 +42,15 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontFamily: "ubuntu-bold",
-    fontSize: 18,
+    fontSize: 15,
     color: Colors.primary500,
   },
   amountContainer: {
-    marginVertical: 10,
+    marginVertical: 15,
   },
   amount: {
-    fontFamily: "ubuntu-regular",
-    fontSize: 64,
+    fontFamily: "anton-regular",
+    fontSize: 50,
     color: Colors.primaryBold,
   },
   dateText: {
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontFamily: "ubuntu-bold",
-    fontSize: 20,
+    fontSize: 16,
     color: Colors.primary500,
   },
 });

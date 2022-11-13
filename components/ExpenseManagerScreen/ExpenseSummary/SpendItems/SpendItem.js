@@ -1,13 +1,20 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../../constants/colors";
-import { CUR } from "../../../../constants/months";
 import {
+  numberFormat,
   restrictDecimalPlace,
   splitStr,
   upperCase,
 } from "../../../../helper/helper";
 
 const SpendItem = ({ data, showCategory, onEdit }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   // console.log(data);
   // const onEditDebtItemHAndler = () => {
   //   navigation.navigate("AddDebtScreen", {
@@ -53,8 +60,7 @@ const SpendItem = ({ data, showCategory, onEdit }) => {
       </View>
       <View>
         <Text style={[styles.amountText, amountColor]}>
-          {CUR}
-          {restrictDecimalPlace(data.amount)}
+          {numberFormat(data.amount, state.currency)}
         </Text>
       </View>
     </Pressable>

@@ -14,6 +14,7 @@ const Eselector = ({ selectItems, onSelectedItem, value, type, enabled }) => {
         onValueChange={onValueChangeHandler}
         enabled={enabled}
         dropdownIconRippleColor="green"
+        numberOfLines={1}
       >
         {selectItems.map((item, index) => {
           return (

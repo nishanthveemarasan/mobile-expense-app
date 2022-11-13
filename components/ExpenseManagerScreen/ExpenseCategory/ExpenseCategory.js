@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
 import { expenseStoreAction } from "../../../store/store";
 
@@ -9,6 +9,12 @@ const ExpenseCategory = ({ category, cIndex, action }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [categoryIndex, setCategoryIndex] = useState(-1);
+  const mapStateToProps = (state) => {
+    return {
+      categoryParentPage: state.expenseStore.categoryParentPage,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const onSelectedCategoryItem = (itemIndex) => {
     dispatch(
       expenseStoreAction.updateCategory({
@@ -18,9 +24,9 @@ const ExpenseCategory = ({ category, cIndex, action }) => {
     );
     //recurring
     let page = "UpdateExpenseItemScreen";
-    if (action == "save") {
+    if (state.categoryParentPage == "save") {
       page = "AddExpenseItemScreen";
-    } else if (action == "recurring") {
+    } else if (state.categoryParentPage == "recurring") {
       page = "AddRecurringPaymentScreen";
     }
     // const page =

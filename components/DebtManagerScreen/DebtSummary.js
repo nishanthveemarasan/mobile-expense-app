@@ -1,12 +1,18 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-chart-kit";
+import { useSelector } from "react-redux";
 import { Colors } from "../../constants/colors";
-import { CUR } from "../../constants/months";
-import { restrictDecimalPlace } from "../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../helper/helper";
 import LineGraph from "../Graph/LineGraph";
 import LinearGredientWrapper from "../wrapper/LinearGredientWrapper";
 
 const DebtSummary = ({ total }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   let amountColor = {
     color:
       total.total > 0 || total.total == 0
@@ -16,12 +22,12 @@ const DebtSummary = ({ total }) => {
 
   const formattedAmount =
     total.total > 0 || total.total == 0
-      ? `${CUR}${restrictDecimalPlace(total.total)}`
-      : `-${CUR}${restrictDecimalPlace(total.total)}`;
+      ? numberFormat(total.total, state.currency)
+      : numberFormat(total.total, state.currency);
 
   const xAxis = [
-    `Total Owed to Me ${CUR}${total.lend}`,
-    `Total owed by Me ${CUR}${total.borrow}`,
+    `Total Lend ${numberFormat(total.lend, state.currency)}`,
+    `Total Borrow ${numberFormat(total.borrow, state.currency)}`,
   ];
   const yAxis = [
     restrictDecimalPlace(total.lend),

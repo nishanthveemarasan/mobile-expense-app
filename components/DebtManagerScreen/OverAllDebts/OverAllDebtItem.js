@@ -1,9 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../constants/colors";
-import { CUR } from "../../../constants/months";
-// import CUR from "../../../constants/months";
+import { numberFormat } from "../../../helper/helper";
 const OverAllDebtItem = ({ item }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const navigation = useNavigation();
   const balance = item.lendTotal - item.borrowTotal;
   const balanceColor = {
@@ -30,8 +36,7 @@ const OverAllDebtItem = ({ item }) => {
           <Text style={styles.dateText}>
             Total Lend :{" "}
             <Text style={styles.lentAmount}>
-              {CUR}
-              {item.lendTotal}
+              {numberFormat(item.lendTotal, state.currency)}
             </Text>
           </Text>
         </View>
@@ -39,16 +44,14 @@ const OverAllDebtItem = ({ item }) => {
           <Text style={styles.dateText}>
             Total Borrow :{" "}
             <Text style={styles.borrowAmount}>
-              {CUR}
-              {item.borrowTotal}
+              {numberFormat(item.borrowTotal, state.currency)}
             </Text>
           </Text>
         </View>
       </View>
       <View>
         <Text style={[styles.amountText, balanceColor]}>
-          {CUR}
-          {balance}
+          {numberFormat(balance, state.currency)}
         </Text>
       </View>
     </Pressable>

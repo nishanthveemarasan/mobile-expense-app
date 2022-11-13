@@ -20,6 +20,7 @@ const AddNewCategoryScreen = ({ navigation }) => {
     return {
       token: state.expenseStore.appToken,
       categoryNames: state.expenseStore.payment.categoryNames,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -109,7 +110,7 @@ const AddNewCategoryScreen = ({ navigation }) => {
       }
     });
     if (formIsValid) {
-      dispatch(addNewCategory(formData, navigation));
+      dispatch(addNewCategory(formData, navigation, state.token));
     }
   };
   return (

@@ -1,8 +1,13 @@
 import { Dimensions, ScrollView } from "react-native";
-import { LineChart } from "react-native-chart-kit";
+import { StackedBarChart } from "react-native-chart-kit";
 import { useSelector } from "react-redux";
-import ScrollViewWrapper from "../wrapper/ScrollViewWrapper";
-const MultiLineGraph = ({ datasets, labels, legends }) => {
+
+const StackBarChart = ({
+  chartLabels,
+  chartBarColors,
+  chartData,
+  chartLegends,
+}) => {
   const mapStateToProps = (state) => {
     return {
       currency: state.authStore.currency,
@@ -11,20 +16,23 @@ const MultiLineGraph = ({ datasets, labels, legends }) => {
   const state = useSelector(mapStateToProps);
   return (
     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-      <LineChart
+      <StackedBarChart
         data={{
-          labels: labels,
-          datasets: datasets,
-          legend: legends,
+          labels: chartLabels,
+          legend: chartLegends,
+          data: chartData,
+          barColors: chartBarColors,
         }}
-        width={Dimensions.get("window").width + 30}
+        width={Dimensions.get("window").width + 250}
         height={300}
         fromZero={true}
         yAxisLabel={state.currency.symbol}
         showValuesOnTopOfBars={true}
         showBarTops={true}
-        verticalLabelRotation={-30}
+        barPercentage={0.5}
         xLabelsOffset={20}
+        showLegend={true}
+        decimalPlaces={0}
         chartConfig={{
           backgroundColor: "#ffefad",
           backgroundGradientFrom: "#ffefad",
@@ -43,4 +51,4 @@ const MultiLineGraph = ({ datasets, labels, legends }) => {
     </ScrollView>
   );
 };
-export default MultiLineGraph;
+export default StackBarChart;

@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ColorArray, Colors } from "../../../../constants/colors";
-import { CUR } from "../../../../constants/months";
 import { getPercentage } from "../../../../helper/expense";
 import { Ionicons } from "@expo/vector-icons";
 import { getRandom, toLower } from "../../../../helper/helper";

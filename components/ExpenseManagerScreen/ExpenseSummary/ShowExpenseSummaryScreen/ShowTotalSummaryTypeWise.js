@@ -1,10 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../../constants/colors";
 import { FONTS } from "../../../../constants/fonts";
-import { CUR } from "../../../../constants/months";
-import { restrictDecimalPlace } from "../../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../../helper/helper";
 
 const ShowTotalSummaryTypeWise = ({ total, title, type }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const backgroundColor = {
     backgroundColor: type == "income" ? Colors.success500 : Colors.danger900,
   };
@@ -15,8 +21,7 @@ const ShowTotalSummaryTypeWise = ({ total, title, type }) => {
       </View>
       <View style={styles.innerContainer}>
         <Text style={[styles.textBalance]}>
-          {CUR}
-          {restrictDecimalPlace(total)}
+          {numberFormat(total, state.currency)}
         </Text>
       </View>
     </View>

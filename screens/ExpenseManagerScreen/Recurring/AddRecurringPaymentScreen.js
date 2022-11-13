@@ -44,13 +44,13 @@ const AddRecurringPaymentScreen = ({ navigation, route }) => {
       isCheckPaymentNumber: state.expenseStore.checked_payment_number,
       recurringPayType: state.expenseStore.recurringPayType,
       selectedRecurringPayItem: state.expenseStore.selectedRecurringItem,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
   const dispatch = useDispatch();
   const [transaction, setTransaction] = useState([]);
   const [isEnabled, setIsEnabled] = useState(false);
-
   useEffect(() => {
     if (state.selectedCategory) {
       dispatch(
@@ -118,7 +118,7 @@ const AddRecurringPaymentScreen = ({ navigation, route }) => {
           ? "unlimited"
           : "limited",
       };
-      dispatch(addRecurringItem(data, navigation));
+      dispatch(addRecurringItem(data, navigation, state.token));
     }
   };
 
@@ -172,7 +172,7 @@ const AddRecurringPaymentScreen = ({ navigation, route }) => {
           ? "unlimited"
           : "limited",
       };
-      dispatch(updateRecurringPaymentItem(data, navigation));
+      dispatch(updateRecurringPaymentItem(data, navigation, state.token));
     }
   };
   const onDeleteRecurringPaymentHandler = () => {
@@ -181,7 +181,7 @@ const AddRecurringPaymentScreen = ({ navigation, route }) => {
       num_of_pay: state.selectedRecurringPayItem.current_pay_num,
       status: "completed",
     };
-    dispatch(deleteRecurringPaymentItem(data, navigation));
+    dispatch(deleteRecurringPaymentItem(data, navigation, state.token));
   };
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>

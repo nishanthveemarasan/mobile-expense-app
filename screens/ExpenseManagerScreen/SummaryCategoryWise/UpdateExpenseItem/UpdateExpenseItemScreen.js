@@ -26,6 +26,7 @@ const UpdateExpenseItemScreen = ({ navigation, route }) => {
     return {
       selectedCategory: state.expenseStore.selectedCategory,
       selectedExpenseItem: state.expenseStore.selectedExpenseItem,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -140,14 +141,14 @@ const UpdateExpenseItemScreen = ({ navigation, route }) => {
       category: getCategory[0],
       subCategory: getCategory.length == 2 ? getCategory[1] : getCategory[0],
     };
-    dispatch(updateExepenseItem(data, navigation));
+    dispatch(updateExepenseItem(data, navigation, state.token));
   };
   const onDeleteExpenseItemHandler = () => {
     const data = {
       ...state.selectedExpenseItem,
       newValue: 0,
     };
-    dispatch(deleteExepenseItem(data, navigation));
+    dispatch(deleteExepenseItem(data, navigation, state.token));
   };
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>

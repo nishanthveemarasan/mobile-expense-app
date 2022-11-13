@@ -26,6 +26,7 @@ const AddExpenseItemScreen = ({ navigation }) => {
   const mapStateToProps = (state) => {
     return {
       selectedCategory: state.expenseStore.selectedCategory,
+      token: state.authStore.token,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -189,8 +190,16 @@ const AddExpenseItemScreen = ({ navigation }) => {
         "Please complete the form and add current Expense/income to process"
       );
       return false;
+    } else if (formData.category.valid) {
+      Alert.alert(
+        "Warning!",
+        "Please complete the form and add current Expense/income to process"
+      );
+      return false;
     } else {
-      dispatch(addNewExpense({ expense: transaction }, navigation));
+      dispatch(
+        addNewExpense({ expense: transaction }, navigation, state.token)
+      );
     }
 
     setFormData((prevState) => {

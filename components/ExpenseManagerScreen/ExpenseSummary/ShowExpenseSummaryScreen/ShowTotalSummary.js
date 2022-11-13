@@ -1,10 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { Colors } from "../../../../constants/colors";
 import { FONTS } from "../../../../constants/fonts";
-import { CUR } from "../../../../constants/months";
-import { restrictDecimalPlace } from "../../../../helper/helper";
+import { numberFormat, restrictDecimalPlace } from "../../../../helper/helper";
 
 const ShowTotalSummary = ({ income, expense, balance }) => {
+  const mapStateToProps = (state) => {
+    return {
+      currency: state.authStore.currency,
+    };
+  };
+  const state = useSelector(mapStateToProps);
   const balanceColor = {
     color: balance > 0 ? Colors.success500 : Colors.danger400,
   };
@@ -13,22 +19,19 @@ const ShowTotalSummary = ({ income, expense, balance }) => {
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Total Income</Text>
         <Text style={styles.textIncome}>
-          {CUR}
-          {restrictDecimalPlace(income)}
+          {numberFormat(income, state.currency)}
         </Text>
       </View>
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Total Expense</Text>
         <Text style={styles.textExpense}>
-          {CUR}
-          {restrictDecimalPlace(expense)}
+          {numberFormat(expense, state.currency)}
         </Text>
       </View>
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Balance</Text>
         <Text style={[styles.textBalance, balanceColor]}>
-          {CUR}
-          {restrictDecimalPlace(balance)}
+          {numberFormat(balance, state.currency)}
         </Text>
       </View>
     </View>
