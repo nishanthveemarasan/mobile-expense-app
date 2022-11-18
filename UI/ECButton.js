@@ -1,15 +1,33 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Colors } from "../constants/colors";
 
-const ECButton = ({ name, color, onPressed, style }) => {
+const ECButton = ({
+  name,
+  color,
+  onPressed,
+  style,
+  textStyle,
+  showIndicator,
+}) => {
   return (
     <Pressable
       android_ripple={{ color: "green" }}
       style={({ pressed }) => [style, pressed ? styles.pressedButton : null]}
       onPress={onPressed}
+      disabled={showIndicator}
     >
       <View style={[styles.buttonContainer]}>
-        <Text style={styles.labelText}>{name}</Text>
+        {!showIndicator ? (
+          <Text style={[styles.labelText, textStyle]}>{name}</Text>
+        ) : (
+          <ActivityIndicator animating={showIndicator} color="white" />
+        )}
       </View>
     </Pressable>
   );
@@ -23,6 +41,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingVertical: 10,
     borderRadius: 6,
+    minWidth: "20%",
   },
   labelText: {
     color: "white",

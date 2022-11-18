@@ -11,6 +11,13 @@ const SavingSummary = () => {
     };
   };
   const state = useSelector(mapStateToProps);
+  const total =
+    state.data >= 0
+      ? numberFormat(state.data, state.currency)
+      : `-${numberFormat(state.data, state.currency)}`;
+  const totalColor = {
+    color: state.data >= 0 ? Colors.primaryBold : Colors.danger1000,
+  };
   return (
     <LinearGredientWrapper colors={["rgba(0,212,255,1)", "rgba(255,0,0,0)"]}>
       <View style={styles.rootContainer}>
@@ -18,9 +25,7 @@ const SavingSummary = () => {
           <Text style={styles.headingText}>Total Saving</Text>
         </View>
         <View style={styles.amountContainer}>
-          <Text style={styles.amount}>
-            {numberFormat(state.data, state.currency)}
-          </Text>
+          <Text style={[styles.amount, totalColor]}>{total}</Text>
         </View>
         <View>
           <Text style={styles.dateText}>
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
   amount: {
     fontFamily: "anton-regular",
     fontSize: 50,
-    color: Colors.primaryBold,
+    // color: Colors.primaryBold,
   },
   dateText: {
     fontFamily: "ubuntu-bold-italic",

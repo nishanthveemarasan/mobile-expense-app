@@ -18,7 +18,7 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
   const mapStateToProps = (state) => {
     return {
-      loaded: state.authStore.loaded,
+      loaded: state.authStore.registerLoaded,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -27,15 +27,16 @@ const SignUpScreen = () => {
     email: {
       value: "",
       valid: false,
-      error: "Please enter a valid email!!",
+      touched: false,
       validator: [email],
+      error: "Enter a valid Email Address",
     },
     password: {
       value: "",
       valid: false,
       touched: false,
-      validator: [required, length({ min: 5 })],
-      error: "Password should have atleast 5 charactors",
+      validator: [required, length({ min: 6 })],
+      error: "Password should have atleast 6 charactors",
     },
     password_confirmation: {
       value: "",

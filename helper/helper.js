@@ -291,8 +291,10 @@ export const getMonthWithStartEndDateDetails = (currentDate = "") => {
   };
 };
 export const numberFormat = (amount, currency) => {
-  return Intl.NumberFormat(currency.locale, {
-    style: "currency",
-    currency: currency.code,
-  }).format(amount);
+  const formattedAmount = currencyFormat(restrictDecimalPlace(amount));
+  return `${currency.symbol}${formattedAmount}`;
+};
+
+export const currencyFormat = (num) => {
+  return num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 };

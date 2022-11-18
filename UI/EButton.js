@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingVertical: 15,
     borderRadius: 6,
+    paddingHorizontal: 15,
   },
   labelText: {
     color: "white",

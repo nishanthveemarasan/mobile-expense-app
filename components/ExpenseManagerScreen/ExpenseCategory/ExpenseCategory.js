@@ -66,7 +66,7 @@ const ExpenseCategory = ({ category, cIndex, action }) => {
 export default ExpenseCategory;
 const styles = StyleSheet.create({
   rootContainer: {
-    backgroundColor: Colors.grey900,
+    backgroundColor: Colors.pink50,
     height: 70,
     justifyContent: "center",
     paddingLeft: 10,

@@ -5,6 +5,7 @@ import SummaryLineGraph from "../../components/savingMangerScreen/Graph/SummaryL
 import SummayForYear from "../../components/savingMangerScreen/Transactions/SummayForYear";
 import LinearGredientWrapper from "../../components/wrapper/LinearGredientWrapper";
 import ScrollViewWrapper from "../../components/wrapper/ScrollViewWrapper";
+import { Colors } from "../../constants/colors";
 import { monthsName } from "../../constants/months";
 
 import {
@@ -67,7 +68,11 @@ const SavingTotalSummary = () => {
           </View>
         </ScrollViewWrapper>
       ) : (
-        <EActivityIndicator />
+        <View style={styles.wargingTextContainer}>
+          <Text style={styles.wargingText}>
+            No Transaction has been made Yet
+          </Text>
+        </View>
       )}
     </LinearGredientWrapper>
   );
@@ -103,5 +108,19 @@ const styles = StyleSheet.create({
   },
   amountContainer: {
     marginBottom: "7%",
+  },
+  wargingTextContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.pink50,
+    paddingVertical: 30,
+    borderRadius: 6,
+    elevation: 8,
+    marginTop: 40,
+  },
+  wargingText: {
+    fontFamily: "ubuntu-regular",
+    fontSize: 18,
+    color: Colors.primary900,
   },
 });

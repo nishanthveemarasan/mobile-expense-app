@@ -10,21 +10,30 @@ import {
   sendPostAdminApi,
 } from "../../helper/axios";
 import { showError } from "../../helper/error";
-import { debtStoreAction } from "../store";
+import { removeToken } from "../../helper/token";
+import { authStoreAction, debtStoreAction } from "../store";
 
 export const getDebtData = (token) => {
   return async (dispatch) => {
     try {
       dispatch(debtStoreAction.sendingHttpRequest());
       let response = await sendGetAdminApi("mobile/debts", token);
-      if (response.data.error) {
-        showError(error.response.data);
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
+        dispatch(debtStoreAction.getHttpRequest());
+        return false;
       }
       dispatch(debtStoreAction.setInitialData(response.data.data));
+      dispatch(debtStoreAction.getHttpRequest());
     } catch (error) {
+      if (error.response.status == 401) {
+        removeToken();
+        dispatch(authStoreAction.storeAuthToken({ token: null }));
+      }
       showError(error.response.data);
+      dispatch(debtStoreAction.getHttpRequest());
+      return false;
     }
-    dispatch(debtStoreAction.getHttpRequest());
   };
 };
 
@@ -32,8 +41,9 @@ export const addNewDebt = (data, navigation, token) => {
   return async (dispatch) => {
     try {
       let response = await sendPostAdminApi("mobile/debts/store", data, token);
-      if (response.data.error) {
-        showError(error.response.data);
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
+        return false;
       }
       const uuid = response.data.data;
       const newData = {
@@ -51,7 +61,12 @@ export const addNewDebt = (data, navigation, token) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        removeToken();
+        dispatch(authStoreAction.storeAuthToken({ token: null }));
+      }
       showError(error.response.data);
+      return false;
     }
   };
 };
@@ -65,8 +80,9 @@ export const updateDebt = (data, navigation, token) => {
         data,
         token
       );
-      if (response.data.error) {
-        showError(error.response.data);
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
+        return false;
       }
       dispatch(debtStoreAction.createDebt(data));
       dispatch(debtStoreAction.updateDebtData(data));
@@ -76,7 +92,12 @@ export const updateDebt = (data, navigation, token) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        removeToken();
+        dispatch(authStoreAction.storeAuthToken({ token: null }));
+      }
       showError(error.response.data);
+      return false;
     }
   };
 };
@@ -89,8 +110,9 @@ export const deleteDebt = (data, navigation, token) => {
         `mobile/debts/${uuid}/delete`,
         token
       );
-      if (response.data.error) {
-        showError(error.response.data);
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
+        return false;
       }
       dispatch(debtStoreAction.deleteDebtItem(data));
       dispatch(debtStoreAction.deleteDebtDataArray(data));
@@ -100,7 +122,12 @@ export const deleteDebt = (data, navigation, token) => {
         navigation.navigate("GetDebtScreen");
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        removeToken();
+        dispatch(authStoreAction.storeAuthToken({ token: null }));
+      }
       showError(error.response.data);
+      return false;
     }
   };
 };

@@ -23,7 +23,7 @@ const DebtSummary = ({ total }) => {
   const formattedAmount =
     total.total > 0 || total.total == 0
       ? numberFormat(total.total, state.currency)
-      : numberFormat(total.total, state.currency);
+      : `-${numberFormat(total.total, state.currency)}`;
 
   const xAxis = [
     `Total Lend ${numberFormat(total.lend, state.currency)}`,

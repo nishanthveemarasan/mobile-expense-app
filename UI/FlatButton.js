@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../constants/colors";
 
-function FlatButton({ children, onPress }) {
+function FlatButton({ children, onPress, page }) {
   return (
     <Pressable
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-      onPress={onPress}
+      onPress={onPress.bind(this, page)}
     >
       <View>
         <Text style={styles.buttonText}>{children}</Text>
@@ -27,5 +27,6 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     color: Colors.light500,
+    fontSize: 12,
   },
 });

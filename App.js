@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { Colors } from "./constants/colors";
 import { FONTS } from "./constants/fonts";
@@ -34,6 +34,8 @@ import { useEffect, useState } from "react";
 import GeneralSettingScreen from "./screens/GeneralSettingScreen";
 import EActivityIndicator from "./UI/EActivityIndicator";
 import { getSettingData } from "./store/reducer/auth-reducer";
+import ForgetPasswordScreen from "./screens/Authentication/ForgetPasswordScreen";
+import ResetPasswordScreen from "./screens/Authentication/ResetPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -223,6 +225,20 @@ const AuthNavigation = () => {
           title: "Setup your Account",
         }}
       />
+      <Stack.Screen
+        component={ForgetPasswordScreen}
+        name="ForgetPasswordScreen"
+        options={{
+          title: "Forget Your Password?",
+        }}
+      />
+      <Stack.Screen
+        component={ResetPasswordScreen}
+        name="ResetPasswordScreen"
+        options={{
+          title: "Reset Your Password",
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -231,6 +247,7 @@ const AppContainer = () => {
   const mapStateToProps = (state) => {
     return {
       token: state.authStore.token,
+      loaded: state.authStore.initialDataLoaded,
     };
   };
   const state = useSelector(mapStateToProps);
@@ -246,14 +263,18 @@ const AppContainer = () => {
         }
         setAppIsReady(true);
       } catch (error) {
-        console.log(error);
+        Alert.alert(
+          "App Failed!!",
+          "App Failed due to some unavoidable reason!!. We are working into it, please try agin later. Thank you for your paitence!"
+        );
+        setAppIsReady(true);
       }
     };
     getToken();
-  }, [dispatch, state.token, appIsReady]);
-
-  if (!appIsReady) {
-    // return <EActivityIndicator />;
+  }, [state.token, appIsReady]);
+  console.log(state.loaded);
+  if (!appIsReady || state.loaded) {
+    return <EActivityIndicator />;
   }
   return (
     <>

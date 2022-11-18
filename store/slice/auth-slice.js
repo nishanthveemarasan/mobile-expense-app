@@ -1,6 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loaded: false,
+  loginLoaded: false,
+  registerLoaded: false,
+  initialDataLoaded: false,
+  logoutLoaded: false,
   dataLoaded: false,
   token: null,
   userName: "",
@@ -11,12 +15,31 @@ const initialState = {
   },
   currencyList: [],
   localeList: [],
+  showCodeForm: false,
+  requestCodeLoaded: false,
+  verificationCodeLoaded: false,
+  resetPasswordLoaded: false,
+  resetEmail: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    updateResetEmail(state, action) {
+      state.resetEmail = action.payload.email;
+    },
+    showCodeForm(state) {
+      state.showCodeForm = true;
+    },
+    hideCodeForm(state) {
+      state.showCodeForm = false;
+    },
+    updateLoading(state, action) {
+      let type = action.payload.type;
+      let value = action.payload.value;
+      state[type] = value;
+    },
     sendingHttpRequest(state) {
       state.loaded = true;
     },

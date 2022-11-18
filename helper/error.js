@@ -10,3 +10,7 @@ export const showError = (error, action = "Action Failed!") => {
   }
   Alert.alert(action, errMsg);
 };
+
+export const showOutput = (message, action = "Action Successful") => {
+  Alert.alert(action, message);
+};

@@ -21,7 +21,7 @@ const Transactions = ({ data, onDeletePressed }) => {
     const amount =
       item.type == "income"
         ? numberFormat(item.amount, state.currency)
-        : `${numberFormat(item.amount, state.currency)}`;
+        : `-${numberFormat(item.amount, state.currency)}`;
     return (
       <View style={styles.itemContainer}>
         <View style={styles.leftContainer}>
