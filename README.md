@@ -62,6 +62,7 @@ that token, they will be able to access.So that, their data will be protected. w
     <img src="assets/readme/expenses/dashboard.jpg" width="25%">
     <img src="assets/readme/expenses/add_expense_1.jpg" width="25%">
     <img src="assets/readme/expenses/add_expense_2.jpg" width="25%">
+    <img src="assets/readme/expenses/add_expense_date.jpg" width="25%">
     <img src="assets/readme/expenses/expense_summary_graph.jpg" width="25%">
     <img src="assets/readme/expenses/categories.jpg" width="25%">
     <img src="assets/readme/expenses/add_category_1.jpg" width="25%">
@@ -93,6 +94,22 @@ that token, they will be able to access.So that, their data will be protected. w
     <img src="assets/readme/savings/total_summary.jpg" width="25%">
     <img src="assets/readme/savings/savings_list.jpg" width="25%">
     <img src="assets/readme/savings/add_savings.jpg" width="25%">
+    <img src="assets/readme/savings/add_saving_dropdown.jpg" width="25%">
     <img src="assets/readme/savings/update_savings.jpg" width="25%">
     <img src="assets/readme/savings/summary_graph.jpg" width="25%">
+</p>
+
+## KEEP TRACK OF DEBTS
+
+<p>
+    <img src="assets/readme/debts/debt_summary.jpg" width="25%">
+    <img src="assets/readme/debts/add_debt_from_list.jpg" width="25%">
+    <img src="assets/readme/debts/add_debt_from_new_name.jpg" width="25%">
+    <img src="assets/readme/debts/add_debt_form_dropdown.jpg" width="25%">
+    <img src="assets/readme/debts/add_debt_form_date.jpg" width="25%">
+    <img src="assets/readme/debts/lend_to.jpg" width="25%">
+    <img src="assets/readme/debts/get_from.jpg" width="25%">
+    <img src="assets/readme/debts/debt_summary_by_name.jpg" width="25%">
+    <img src="assets/readme/debts/debt_by_name.jpg" width="25%">
+    <img src="assets/readme/debts/update_debt_form.jpg" width="25%">
 </p>
