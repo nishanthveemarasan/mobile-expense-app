@@ -6,6 +6,11 @@ to secure our app, I have implemented a login system, where user has to register
 once user completes the registeration, they will be able to login and access the system. A token will be generated while logging in, using
 that token, they will be able to access.So that, their data will be protected. which mean, every time, user tries to access the system with GET/PATCH/POST/DELETE operation, server will decide if the user is authenticated and has the right permission to access a resource
 
+## APP LOADING
+
+<p>
+    <img src="assets/readme/app_loading.jpg" width="30%">
+</p>
 ## LOGIN SYSTEM
 
 ### USER REGISTRATION
@@ -80,4 +85,14 @@ that token, they will be able to access.So that, their data will be protected. w
     <img src="assets/readme/expenses/view active recurring.jpg" width="25%">
     <img src="assets/readme/expenses/update_recurring.jpg" width="25%">
     
+</p>
+
+## KEEP TRACK OF SAVINGS
+
+<p>
+    <img src="assets/readme/savings/total_summary.jpg" width="25%">
+    <img src="assets/readme/savings/savings_list.jpg" width="25%">
+    <img src="assets/readme/savings/add_savings.jpg" width="25%">
+    <img src="assets/readme/savings/update_savings.jpg" width="25%">
+    <img src="assets/readme/savings/summary_graph.jpg" width="25%">
 </p>
