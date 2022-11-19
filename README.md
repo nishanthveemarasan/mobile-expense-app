@@ -43,4 +43,41 @@ that token, they will be able to access.So that, their data will be protected. w
     <img src="assets/readme/home_page.jpg" width="25%">
 </p>
 
-### Daily Expense
+## General Settings
+
+** Setup your name and Currency **
+
+<p>
+    <img src="assets/readme/settings.jpg" width="25%">
+</p>
+
+## Daily Expense
+
+<p>
+    <img src="assets/readme/expenses/dashboard.jpg" width="25%">
+    <img src="assets/readme/expenses/add_expense_1.jpg" width="25%">
+    <img src="assets/readme/expenses/add_expense_2.jpg" width="25%">
+    <img src="assets/readme/expenses/expense_summary_graph.jpg" width="25%">
+    <img src="assets/readme/expenses/categories.jpg" width="25%">
+    <img src="assets/readme/expenses/add_category_1.jpg" width="25%">
+    <img src="assets/readme/expenses/add-category_2.jpg" width="25%">
+    <img src="assets/readme/expenses/all_expense_income_1.jpg" width="25%">
+    <img src="assets/readme/expenses/all_expene_income_weekly_wise.jpg" width="25%">
+    <img src="assets/readme/expenses/all_expense_income_weekly_categorywise.jpg" width="25%">
+    <img src="assets/readme/expenses/expense_summary.jpg" width="25%">
+    <img src="assets/readme/expenses/expense_summary_graph.jpg" width="25%">
+    <img src="assets/readme/expenses/expense_summary_weekly_datewise.jpg" width="25%">
+    <img src="assets/readme/expenses/income_summary.jpg" width="25%">
+    <img src="assets/readme/expenses/income_summary_weekly.jpg" width="25%">
+    <img src="assets/readme/expenses/monthly_graph_1.jpg" width="25%">
+    <img src="assets/readme/expenses/monthly_graph_2.jpg" width="25%">
+    <img src="assets/readme/expenses/weekly_graph_1.jpg" width="25%">
+    <img src="assets/readme/expenses/weekly_graph_2.jpg" width="25%">
+    <img src="assets/readme/expenses/weekly_graph_3.jpg" width="25%">
+    <img src="assets/readme/expenses/recurring_payment_summary.jpg" width="25%">
+    <img src="assets/readme/expenses/add_recurring.jpg" width="25%">
+    <img src="assets/readme/expenses/view_completed_recurring.jpg" width="25%">
+    <img src="assets/readme/expenses/view active recurring.jpg" width="25%">
+    <img src="assets/readme/expenses/update_recurring.jpg" width="25%">
+    
+</p>
