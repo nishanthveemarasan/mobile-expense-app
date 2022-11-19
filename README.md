@@ -25,7 +25,7 @@ that token, they will be able to access.So that, their data will be protected. w
     <img src="assets/readme/login.jpg" width="30%">
 </p>
 
-###FORGET PASSWORD PROCESS
+### FORGET PASSWORD PROCESS
 
 <p>
     <img src="assets/readme/forget_password.jpg" width="25%">
