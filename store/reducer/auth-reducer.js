@@ -47,35 +47,28 @@ export const requestVarificationCode = (data) => {
       })
     );
     try {
-      dispatch(getCLientCredential());
-      const token = await AsyncStorage.getItem(
-        "client-credentials-nishanth-mobile-app"
+      const response = await postAPI(
+        "/client/forget-password/store/email",
+        data
       );
-      if (token) {
-        const response = await sendPostAdminApi(
-          "/client/forget-password/store/email",
-          data,
-          token
-        );
-        if (response.data && response.data.error) {
-          Alert.alert("Action Failed!", response.data.error);
-          dispatch(
-            authStoreAction.updateLoading({
-              type: "requestCodeLoaded",
-              value: false,
-            })
-          );
-          return false;
-        }
-        showOutput(response.data.data.message);
-        dispatch(authStoreAction.showCodeForm());
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
         dispatch(
           authStoreAction.updateLoading({
             type: "requestCodeLoaded",
             value: false,
           })
         );
+        return false;
       }
+      showOutput(response.data.data.message);
+      dispatch(authStoreAction.showCodeForm());
+      dispatch(
+        authStoreAction.updateLoading({
+          type: "requestCodeLoaded",
+          value: false,
+        })
+      );
     } catch (error) {
       dispatch(
         authStoreAction.updateLoading({
@@ -98,41 +91,35 @@ export const verifyVarificationCode = (data, navigation) => {
       })
     );
     try {
-      dispatch(getCLientCredential());
-      const token = await AsyncStorage.getItem(
-        "client-credentials-nishanth-mobile-app"
+      const response = await postAPI(
+        "client/forget-password/reset/password/check",
+        data
       );
-      if (token) {
-        const response = await sendPostAdminApi(
-          "client/forget-password/reset/password/check",
-          data,
-          token
-        );
-        if (response.data && response.data.error) {
-          Alert.alert("Varification Failed!", response.data.error);
-          dispatch(
-            authStoreAction.updateLoading({
-              type: "verificationCodeLoaded",
-              value: false,
-            })
-          );
-          return false;
-        }
-        showOutput("Code has been verified successfully!!");
-        dispatch(
-          authStoreAction.updateResetEmail({
-            email: response.data.data.email,
-          })
-        );
+      if (response.data && response.data.error) {
+        Alert.alert("Varification Failed!", response.data.error);
         dispatch(
           authStoreAction.updateLoading({
             type: "verificationCodeLoaded",
             value: false,
           })
         );
-        navigation.replace("ResetPasswordScreen");
+        return false;
       }
+      showOutput("Code has been verified successfully!!");
+      dispatch(
+        authStoreAction.updateResetEmail({
+          email: response.data.data.email,
+        })
+      );
+      dispatch(
+        authStoreAction.updateLoading({
+          type: "verificationCodeLoaded",
+          value: false,
+        })
+      );
+      navigation.replace("ResetPasswordScreen");
     } catch (error) {
+      console.log(error);
       dispatch(
         authStoreAction.updateLoading({
           type: "verificationCodeLoaded",
@@ -154,38 +141,31 @@ export const resetPassword = (data, navigation) => {
           value: true,
         })
       );
-      dispatch(getCLientCredential());
-      const token = await AsyncStorage.getItem(
-        "client-credentials-nishanth-mobile-app"
+      const response = await postAPI(
+        "client/forget-password/reset/password/update",
+        data
       );
-      if (token) {
-        const response = await sendPostAdminApi(
-          "client/forget-password/reset/password/update",
-          data,
-          token
-        );
-        if (response.data && response.data.error) {
-          Alert.alert("Action Failed!", response.data.error);
-          dispatch(
-            authStoreAction.updateLoading({
-              type: "resetPasswordLoaded",
-              value: false,
-            })
-          );
-          return false;
-        }
-        showOutput(
-          "Your Password has been Reset Successfully!!",
-          "Verification successfull"
-        );
+      if (response.data && response.data.error) {
+        Alert.alert("Action Failed!", response.data.error);
         dispatch(
           authStoreAction.updateLoading({
             type: "resetPasswordLoaded",
             value: false,
           })
         );
-        navigation.replace("LoginScreen");
+        return false;
       }
+      showOutput(
+        "Your Password has been Reset Successfully!!",
+        "Verification successfull"
+      );
+      dispatch(
+        authStoreAction.updateLoading({
+          type: "resetPasswordLoaded",
+          value: false,
+        })
+      );
+      navigation.replace("LoginScreen");
       // navigation.replace("LoginScreen");
     } catch (error) {
       showError(error.response.data, "Verification failed");

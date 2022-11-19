@@ -1,7 +1,4 @@
 import axios from "axios";
-const API_URL = "https://nkitservice.com/expensetest/";
-export const CLIENT_CREDENTIAL_ID = "97c30364-75ab-4062-aead-f4cb698b81f7";
-export const CLIENT_SECRET = "tBnsylQTkaii5sCrjtPusn2EUkY4hWLBFZgnlv0T";
 export const API = axios.create({
   baseURL: API_URL,
   headers: {
