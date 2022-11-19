@@ -25,8 +25,8 @@ that token, they will be able to access.So that, their data will be protected. w
 <p>
     <img src="assets/readme/forget_password.jpg" width="25%">
     <img src="assets/readme/invalid_forget_password.jpg" width="25%">
-    <img src="assets/readme/valid_email_forget_password.jpg" width="25%">
-    <img src="assets/readme/enter_code_forgetPassword.jpg" width="25%">
+    <img src="assets/readme/valid_email_successful.jpg" width="25%">
+    <img src="assets/readme/enter_code_password.jpg" width="25%">
     <img src="assets/readme/reset_password.jpg" width="25%">
 </p>
 
@@ -42,3 +42,5 @@ that token, they will be able to access.So that, their data will be protected. w
 <p>
     <img src="assets/readme/home_page.jpg" width="25%">
 </p>
+
+### Daily Expense
